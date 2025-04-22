@@ -108,7 +108,64 @@
             </div>
         </div>
     </div>
+</div> 
+<!-- Login Modal -->
+<div class="modal" id="login-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button class="close-btn" id="close-login-modal">&times;</button>
+            <div class="modal-header-overlay">
+                <div class="modal-welcome-text">Welcome Back to Jeevan Ahaar</div>
+                <div class="fruits-decoration">
+                    <div class="fruit" style="background-color: #ff6347;"></div>
+                    <div class="fruit" style="background-color: #ffa500;"></div>
+                    <div class="fruit" style="background-color: #32cd32;"></div>
+                    <div class="fruit" style="background-color: #8a2be2;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-buttons">
+            <button class="tab-btn active" data-panel="donor-login-panel">Donor Login</button>
+            <button class="tab-btn" data-panel="receiver-login-panel">Receiver Login</button>
+        </div>
+
+        <div class="login-form">
+            <div class="tab-panel active" id="donor-login-panel">
+                <form>
+                    <div class="form-group">
+                        <label for="donor-login-email">Email Address</label>
+                        <input type="email" id="donor-login-email" class="form-control" placeholder="Enter your email">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="donor-login-password">Password</label>
+                        <input type="password" id="donor-login-password" class="form-control" placeholder="Enter your password">
+                    </div>
+
+                    <button type="submit" class="btn btn-donor">Login as Food Donor</button>
+                </form>
+            </div>
+
+            <div class="tab-panel" id="receiver-login-panel">
+                <form>
+                    <div class="form-group">
+                        <label for="receiver-login-email">Email Address</label>
+                        <input type="email" id="receiver-login-email" class="form-control" placeholder="Enter your email">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="receiver-login-password">Password</label>
+                        <input type="password" id="receiver-login-password" class="form-control" placeholder="Enter your password">
+                    </div>
+
+                    <button type="submit" class="btn btn-receiver">Login as Food Receiver</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
+
     <section class="features">
         <h2 class="section-title">Our Impact</h2>
         <div class="features-grid">
@@ -254,136 +311,5 @@
             <p>&copy; 2025 Jeevan Ahaar. All rights reserved.</p>
         </div>
     </footer>
-
-    <div class="modal" id="register-modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <button class="close-btn" id="close-register-modal">&times;</button>
-            <div class="modal-header-overlay">
-                <div class="modal-welcome-text">Join Jeevan Ahaar</div>
-                <div class="fruits-decoration">
-                    <div class="fruit" style="background-color: #ff6347;"></div>
-                    <div class="fruit" style="background-color: #ffa500;"></div>
-                    <div class="fruit" style="background-color: #32cd32;"></div>
-                    <div class="fruit" style="background-color: #8a2be2;"></div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="tab-buttons">
-            <button class="tab-btn active" data-panel="donor-panel">Food Donor</button>
-            <button class="tab-btn" data-panel="receiver-panel">Food Receiver</button>
-        </div>
-        
-        <div class="register-form">
-            <!-- Social Login Options -->
-            <div class="social-login">
-                <button class="google-login-btn">
-                    <img src="/api/placeholder/18/18" alt="Google Icon" class="google-icon">
-                    Continue with Google
-                </button>
-                <div class="divider">
-                    <span>or register with email</span>
-                </div>
-            </div>
-            
-            <!-- Donor Panel -->
-            <div class="tab-panel active" id="donor-panel">
-                <form>
-                    <!-- Type Selection -->
-                    <div class="form-group donor-type">
-                        <label>I am a:</label>
-                        <div class="radio-group">
-                            <label class="radio-label">
-                                <input type="radio" name="donor-type" value="individual" checked>
-                                <span>Individual</span>
-                            </label>
-                            <label class="radio-label">
-                                <input type="radio" name="donor-type" value="organization">
-                                <span>Organization</span>
-                            </label>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="donor-name">Full Name</label>
-                        <input type="text" id="donor-name" class="form-control" placeholder="Enter your name">
-                    </div>
-                    
-                    <div class="form-group org-name" style="display: none;">
-                        <label for="donor-org-name">Organization Name</label>
-                        <input type="text" id="donor-org-name" class="form-control" placeholder="Enter organization name">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="donor-email">Email Address</label>
-                        <input type="email" id="donor-email" class="form-control" placeholder="Enter your email">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="donor-phone">Phone Number</label>
-                        <input type="tel" id="donor-phone" class="form-control" placeholder="Enter your phone number">
-                    </div>
-                    
-                    <div class="form-group location-group">
-                        <label for="donor-location">Location</label>
-                        <div class="location-input-group">
-                            <input type="text" id="donor-location" class="form-control" placeholder="Enter your address">
-                            <button type="button" class="location-btn">
-                                <img src="/api/placeholder/16/16" alt="Location" class="location-icon">
-                            </button>
-                        </div>
-                        <small class="text-muted">Click on the location icon to use your current location</small>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="donor-password">Create Password</label>
-                        <input type="password" id="donor-password" class="form-control" placeholder="Create a password">
-                    </div>
-                    
-                    <button type="submit" class="btn btn-donor">Register as Food Donor</button>
-                </form>
-            </div>
-            
-            <!-- Receiver Panel -->
-            <div class="tab-panel" id="receiver-panel">
-                <form>
-                    <div class="form-group">
-                        <label for="receiver-name">NGO / Organization Name</label>
-                        <input type="text" id="receiver-name" class="form-control" placeholder="Enter organization name">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="receiver-email">Email Address</label>
-                        <input type="email" id="receiver-email" class="form-control" placeholder="Enter your email">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="receiver-phone">Phone Number</label>
-                        <input type="tel" id="receiver-phone" class="form-control" placeholder="Enter your phone number">
-                    </div>
-                    
-                    <div class="form-group location-group">
-                        <label for="receiver-location">Location</label>
-                        <div class="location-input-group">
-                            <input type="text" id="receiver-location" class="form-control" placeholder="Enter your address">
-                            <button type="button" class="location-btn">
-                                <img src="/api/placeholder/16/16" alt="Location" class="location-icon">
-                            </button>
-                        </div>
-                        <small class="text-muted">Click on the location icon to use your current location</small>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="receiver-password">Create Password</label>
-                        <input type="password" id="receiver-password" class="form-control" placeholder="Create a password">
-                    </div>
-                    
-                    <button type="submit" class="btn btn-receiver">Register as Food Receiver</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
 </body>
 </html>
