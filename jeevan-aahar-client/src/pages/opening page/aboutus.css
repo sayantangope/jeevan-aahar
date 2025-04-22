@@ -1,0 +1,95 @@
+/* Team Section Styles */
+.team-section {
+  padding: 60px 20px;
+  background-color: #f7f7f7;
+}
+
+.team-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+}
+
+.team-member {
+  background-color: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+}
+
+.team-member:hover {
+  transform: translateY(-10px);
+}
+
+.member-image {
+  height: 250px;
+  background-color: #ddd;
+  background-size: cover;
+  background-position: center;
+}
+
+.member-info {
+  padding: 20px;
+}
+
+.member-info h3 {
+  margin-bottom: 5px;
+  font-size: 20px;
+  color: #e74c3c;
+}
+
+.member-role {
+  color: #555;
+  font-weight: 500;
+  margin-bottom: 15px;
+}
+
+.member-bio {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 15px;
+  line-height: 1.5;
+}
+
+.member-social {
+  display: flex;
+  gap: 10px;
+}
+
+.member-social-icon {
+  width: 32px;
+  height: 32px;
+  background-color: #f5f5f5;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #555;
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.3s;
+}
+
+.member-social-icon:hover {
+  background-color: #e74c3c;
+  color: white;
+}
+
+/* Responsive styles for team section */
+@media (max-width: 992px) {
+  .team-grid {
+      grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .team-grid {
+      grid-template-columns: 1fr;
+  }
+}

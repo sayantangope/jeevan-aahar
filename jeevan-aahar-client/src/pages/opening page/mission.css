@@ -1,0 +1,120 @@
+/* Mission Section Styles */
+.mission-section {
+    padding: 60px 20px;
+    background-color: #fff;
+}
+
+.mission-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.mission-content {
+    display: flex;
+    gap: 40px;
+    margin-top: 30px;
+}
+
+.mission-text {
+    flex: 1;
+}
+
+.mission-list {
+    list-style: none;
+    padding: 0;
+}
+
+.mission-list li {
+    display: flex;
+    margin-bottom: 25px;
+    align-items: flex-start;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.mission-list li:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.mission-icon {
+    font-size: 28px;
+    margin-right: 15px;
+    min-width: 40px;
+    text-align: center;
+}
+
+.mission-point {
+    line-height: 1.6;
+}
+
+.mission-point strong {
+    color: #e74c3c;
+}
+
+.mission-images {
+    flex: 1;
+}
+
+.mission-image-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 20px;
+    height: 100%;
+}
+
+.mission-image {
+    position: relative;
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.image-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+    padding: 15px;
+    color: white;
+    font-weight: 500;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.mission-image:hover .image-overlay {
+    opacity: 1;
+}
+
+/* Responsive styles for mission section */
+@media (max-width: 992px) {
+    .mission-content {
+        flex-direction: column;
+    }
+    
+    .mission-images {
+        margin-top: 30px;
+    }
+    
+    .mission-image {
+        height: 180px;
+    }
+}
+
+@media (max-width: 576px) {
+    .mission-image-grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(4, 180px);
+    }
+    
+    .image-overlay {
+        opacity: 1;
+    }
+}
