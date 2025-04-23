@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jeevan Ahaar </title>
     <link rel="stylesheet" href="/jeevan-aahar-client/src/pages/opening page/index.css">
+    <link rel="stylesheet" href="/jeevan-aahar-client/src/pages/opening page/login.css">
     <script src="/jeevan-aahar-client/src/script.js"></script>
     
 
@@ -15,9 +16,9 @@
             <a href="#" class="logo">Jeevan<span>Ahaar</span></a>
             <ul class="nav-menu">
                 <li><a href="#">Home</a></li>
-                <li><a href="/jeevan-aahar-client/public/openingpage/aboutus.html">About Us</a></li>
-                <li><a href="/jeevan-aahar-client/public/openingpage/mission.html">Programs</a></li>
-                <li><a href="#">Gallery</a></li>
+                <li><a href="./aboutus.html">About Us</a></li>
+                <li><a href="./ourprograms.html">Programs</a></li>
+                <li><a href="./gallery.html">Gallery</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
             <div class="auth-buttons">
@@ -31,7 +32,7 @@
     <section class="hero">
         <h1>A Meal. A Smile. A Life.</h1>
         <p>Join us in our mission to eliminate hunger and provide nutritious food to those in need across India.</p>
-        <a href="#" class="cta-btn">Join Our Mission</a>
+        <a href="/jeevan-aahar-client/public/openingpage/mission.html" class="cta-btn">Join Our Mission</a>
     </section>
     <!-- Register Modal -->
 <div class="modal" id="register-modal">
@@ -71,12 +72,49 @@
                         <label for="donor-phone">Phone Number</label>
                         <input type="tel" id="donor-phone" class="form-control" placeholder="Enter your phone number">
                     </div>
+
                     
                     <div class="form-group">
                         <label for="donor-password">Create Password</label>
                         <input type="password" id="donor-password" class="form-control" placeholder="Create a password">
                     </div>
+
+            <div class="form-group">
+                <label for="donor-type">Select Donor Type</label>
+                <select id="donor-type" class="form-control">
+                    <option value="individual">Individual</option>
+                    <option value="restaurant">Restaurant</option>
+                    <option value="ngo">NGO</option>
+                </select>
+            </div>
+
+            <!-- FSSAI ID for Restaurants -->
+            <div id="fssai-id-group" class="form-group" style="display: none;">
+                <label for="fssai-id">FSSAI ID</label>
+                <input type="text" id="fssai-id" class="form-control" placeholder="Enter your FSSAI ID">
+            </div>
+
+            <!-- Darpan ID for NGOs -->
+            <div id="darpan-id-group" class="form-group" style="display: none;">
+                <label for="darpan-id">Darpan ID</label>
+                <input type="text" id="darpan-id" class="form-control" placeholder="Enter your Darpan ID">
+            </div>
+            <script>
+                document.getElementById('donor-type').addEventListener('change', function() {
+                    var donorType = this.value;
                     
+                    // Hide both FSSAI and Darpan ID fields initially
+                    document.getElementById('fssai-id-group').style.display = 'none';
+                    document.getElementById('darpan-id-group').style.display = 'none';
+                    
+                    // Show specific field based on donor type
+                    if (donorType === 'restaurant') {
+                        document.getElementById('fssai-id-group').style.display = 'block';
+                    } else if (donorType === 'ngo') {
+                        document.getElementById('darpan-id-group').style.display = 'block';
+                    }
+                });
+            </script>
                     <button type="submit" class="btn btn-donor">Register as Food Donor</button>
                 </form>
             </div>
@@ -96,6 +134,15 @@
                     <div class="form-group">
                         <label for="receiver-phone">Phone Number</label>
                         <input type="tel" id="receiver-phone" class="form-control" placeholder="Enter your phone number">
+                    </div>
+                    <div class="form-group">
+                        <label for="donor-darpan-id">NGO DARPAN ID</label>
+                        <input type="text" id="donor-darpan-id" class="form-control" placeholder="Enter your NGO DARPAN ID">
+                    </div>
+        
+                    <div class="form-group">
+                        <label for="donor-location">Location</label>
+                        <input type="text" id="donor-location" class="form-control" placeholder="Food receiver address">
                     </div>
                     
                     <div class="form-group">
@@ -255,7 +302,7 @@
             <p>Whether you want to volunteer, donate, or spread awareness, there are many ways to contribute to our fight against hunger.</p>
             <div class="cta-buttons">
                 <a href="#" class="cta-white-btn" id="cta-register-button">Register Now</a>
-                <a href="#" class="cta-outline-btn">Learn More</a>
+                <a href="./mission.html" class="cta-outline-btn">Learn More</a>
             </div>
         </div>
     </section>
@@ -276,11 +323,11 @@
             <div class="footer-column">
                 <h3>Quick Links</h3>
                 <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">About Us</a></li>
-                    <li><a href="#">Programs</a></li>
-                    <li><a href="#">Gallery</a></li>
-                    <li><a href="#">Contact</a></li>
+                    <li><a href="./index.html">Home</a></li>
+                    <li><a href="./aboutus.html">About Us</a></li>
+                    <li><a href="./ourprograms.html">Programs</a></li>
+                    <li><a href="./gallery.html">Gallery</a></li>
+                    <li><a href="#contact">Contact</a></li>
                 </ul>
             </div>
             <footer id="contact">

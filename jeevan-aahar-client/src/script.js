@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    
     // ===== Location Button Functionality =====
     const locationBtns = document.querySelectorAll('.location-btn');
 
@@ -279,4 +280,5 @@ document.addEventListener('DOMContentLoaded', function() {
         animateStats();
     }
 });
+
 
