@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Donor Dashboard</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../src/pages/donor-dashboard/main.css">
+</head>
+<body>
+
+
+  <div class="container">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <i class="fas fa-utensils"></i>
+          <a href="#" class="logo">Jeevan<span>Ahaar</span></a>
+        </div>
+      </div>
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="#" class="nav-link active">
+            <i class="fas fa-th-large"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="./donation.html" class="nav-link">
+            <i class="fas fa-hand-holding-heart"></i>
+            <span>My Donations</span>
+          </a>
+        </li>
+      
+        <li class="nav-item">
+          <a href="./pickups.html" class="nav-link">
+            <i class="fas fa-calendar-alt"></i>
+            <span>Scheduled Pickups</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-cog"></i>
+            <span>Settings</span>
+          </a>
+        </li>
+      </ul>
+      <div class="user-profile">
+        <div class="user-avatar" id="userInitials">--</div>
+        <div class="user-info">
+          <div class="user-name" id="userName">--</div>
+          <div class="user-role" id="userRole">--</div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <div class="header">
+        <div>
+          <h1 class="greeting" id="welcomeMessage">Welcome to your Dashboard!</h1>
+          <p class="date" id="currentDate">--</p>
+        </div>
+        <button class="button" id="newDonationBtn">
+          <i class="fas fa-plus"></i>
+          <span>Create New Donation</span>
+        </button>
+      </div>
+
+      <div class="stats-container">
+        <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-title">TOTAL DONATIONS</div>
+            <div class="stat-icon green">
+              <i class="fas fa-hand-holding-heart"></i>
+            </div>
+          </div>
+          <div class="stat-value" id="totalDonations">-</div>
+          <div class="stat-description" id="donationsChange">-</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-title">MEALS PROVIDED</div>
+            <div class="stat-icon orange">
+              <i class="fas fa-utensils"></i>
+            </div>
+          </div>
+          <div class="stat-value" id="mealsProvided">-</div>
+          <div class="stat-description" id="mealsChange">-</div>
+        </div>
+      </div>
+
+      <div class="donations-section">
+        <div class="section-header">
+          <h2 class="section-title">Recent Donations</h2>
+          <a href="#" class="view-all">View all <i class="fas fa-chevron-right"></i></a>
+        </div>
+        <div class="table-container">
+          <table class="donations-table">
+            <thead>
+              <tr>
+                <th>Donation ID</th>
+                <th>Date</th>
+                <th>Food Category</th>
+                <th>Recipient</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="donationsTableBody">
+              <!-- Data will be loaded from MongoDB -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      const sidebar = document.getElementById('sidebar');
+      const newDonationBtn = document.getElementById('newDonationBtn');
+      
+      // Display current date
+      const today = new Date();
+      const options = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
+      document.getElementById('currentDate').textContent = today.toLocaleDateString('en-US', options);
+      
+      // Toggle sidebar on mobile
+      mobileMenuBtn.addEventListener('click', function() {
+        sidebar.classList.toggle('active');
+        
+        // Change icon based on sidebar state
+        const icon = mobileMenuBtn.querySelector('i');
+        if (sidebar.classList.contains('active')) {
+          icon.classList.remove('fa-bars');
+          icon.classList.add('fa-times');
+        } else {
+          icon.classList.remove('fa-times');
+          icon.classList.add('fa-bars');
+        }
+      });
+      
+      // Close sidebar when clicking outside on mobile
+      document.addEventListener('click', function(event) {
+        const isClickInsideSidebar = sidebar.contains(event.target);
+        const isClickOnMenuBtn = mobileMenuBtn.contains(event.target);
+        
+        if (!isClickInsideSidebar && !isClickOnMenuBtn && sidebar.classList.contains('active')) {
+          sidebar.classList.remove('active');
+          const icon = mobileMenuBtn.querySelector('i');
+          icon.classList.remove('fa-times');
+          icon.classList.add('fa-bars');
+        }
+      });
+      
+      // New donation button animation
+      newDonationBtn.addEventListener('click', function() {
+        this.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+          this.style.transform = '';
+          alert('Create new donation form would open here');
+        }, 150);
+      });
+      
+      // Add hover animations to stat cards
+      const statCards = document.querySelectorAll('.stat-card');
+      statCards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+          this.style.transform = 'translateY(-5px)';
+          this.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.1)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+          this.style.transform = '';
+          this.style.boxShadow = '';
+        });
+      });
+      
+      // Action buttons hover effect - Will be applied to dynamically loaded buttons
+      document.addEventListener('mouseover', function(event) {
+        if (event.target.classList.contains('action-btn')) {
+          event.target.style.backgroundColor = '#4CAF50';
+          event.target.style.color = 'white';
+          event.target.style.borderColor = '#4CAF50';
+        }
+      });
+      
+      document.addEventListener('mouseout', function(event) {
+        if (event.target.classList.contains('action-btn')) {
+          event.target.style.backgroundColor = '';
+          event.target.style.color = '';
+          event.target.style.borderColor = '';
+        }
+      });
+      
+      // Here you would fetch user data and stats from MongoDB
+      // Example:
+      /*
+      // Fetch user data
+      fetch('/api/user-profile')
+        .then(response => response.json())
+        .then(user => {
+          // Update user profile
+          document.getElementById('userName').textContent = user.name;
+          document.getElementById('userRole').textContent = user.role;
+          document.getElementById('userInitials').textContent = user.initials;
+          
+          // Update welcome message
+          document.getElementById('welcomeMessage').textContent = `Welcome back, ${user.name}!`;
+        });
+      
+      // Fetch stats data
+      fetch('/api/donor-stats')
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('totalDonations').innerText = data.totalDonations;
+          document.getElementById('donationsChange').innerText = data.donationsChange;
+          document.getElementById('mealsProvided').innerText = data.mealsProvided;
+          document.getElementById('mealsChange').innerText = data.mealsChange;
+        });
+        
+      // Fetch recent donations
+      fetch('/api/recent-donations')
+        .then(response => response.json())
+        .then(donations => {
+          const tableBody = document.getElementById('donationsTableBody');
+          tableBody.innerHTML = '';
+          
+          donations.forEach(donation => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${donation.id}</td>
+              <td>${donation.date}</td>
+              <td>${donation.foodCategory}</td>
+              <td>${donation.recipient}</td>
+              <td><span class="status ${donation.statusClass}">${donation.status}</span></td>
+              <td>
+                <div class="actions">
+                  <button class="action-btn"><i class="fas fa-eye"></i></button>
+                  <button class="action-btn"><i class="fas ${donation.status === 'Completed' ? 'fa-file-alt' : donation.status === 'Pending' ? 'fa-times' : 'fa-edit'}"></i></button>
+                </div>
+              </td>
+            `;
+            tableBody.appendChild(row);
+          });
+        });
+      */
+    });
+  </script>
+</body>
+</html>
