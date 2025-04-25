@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Pickup Service</title>
+    <style>
+        :root {
+            --primary: #2c8a58;
+            --secondary: #fc8c29;
+            --light: #f9f9f9;
+            --dark: #333;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --info: #17a2b8;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: var(--dark);
+        }
+        
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        
+        .status-bar {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            padding: 1rem;
+            background-color: var(--light);
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .status-button {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .status-button.active {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .status-button:not(.active) {
+            background-color: #e0e0e0;
+            color: var(--dark);
+        }
+        
+        .filters {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background-color: var(--light);
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        
+        .food-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        
+        .food-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .food-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .food-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .food-info {
+            padding: 1rem;
+        }
+        
+        .food-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+        
+        .food-details {
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .food-tags {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .tag {
+            background-color: #eee;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+        
+        .tag.vegetarian {
+            background-color: #adffad;
+        }
+        
+        .tag.vegan {
+            background-color: #7dff7d;
+        }
+        
+        .tag.gluten-free {
+            background-color: #fff0a0;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-top: 0.5rem;
+        }
+        
+        .status.pending {
+            background-color: var(--warning);
+            color: var(--dark);
+        }
+        
+        .status.preparing {
+            background-color: var(--info);
+            color: white;
+        }
+        
+        .status.ready {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .status.completed {
+            background-color: var(--dark);
+            color: white;
+        }
+        
+        .location-map {
+            margin-top: 0.5rem;
+            width: 100%;
+            height: 150px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .contact-info {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .quality {
+            display: flex;
+            gap: 2px;
+        }
+        
+        .star {
+            color: gold;
+        }
+        
+        footer {
+            background-color: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .food-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Food Pickup Service</h1>
+        <p>Connecting donors with those in need</p>
+    </header>
+    
+    <div class="status-bar">
+        <button class="status-button active" data-status="all">All Items</button>
+        <button class="status-button" data-status="pending">Pending</button>
+        <button class="status-button" data-status="preparing">Preparing</button>
+        <button class="status-button" data-status="ready">Ready for Pickup</button>
+        <button class="status-button" data-status="completed">Completed</button>
+    </div>
+    
+    <div class="filters">
+        <div class="filter-group">
+            <label for="category">Category:</label>
+            <select id="category">
+                <option value="all">All</option>
+                <option value="vegetarian">Vegetarian</option>
+                <option value="vegan">Vegan</option>
+                <option value="gluten-free">Gluten Free</option>
+            </select>
+        </div>
+        
+        <div class="filter-group">
+            <label for="donor">Donor:</label>
+            <select id="donor">
+                <option value="all">All</option>
+                <option value="restaurant">Restaurants</option>
+                <option value="bakery">Bakeries</option>
+                <option value="supermarket">Supermarkets</option>
+                <option value="individual">Individuals</option>
+            </select>
+        </div>
+        
+        <div class="filter-group">
+            <label for="quality">Minimum Quality:</label>
+            <select id="quality">
+                <option value="1">★</option>
+                <option value="2">★★</option>
+                <option value="3" selected>★★★</option>
+                <option value="4">★★★★</option>
+                <option value="5">★★★★★</option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="food-list">
+            <!-- Food Item 1 -->
+            <div class="food-card" data-status="ready" data-category="vegetarian,gluten-free" data-quality="4">
+                <img src="/api/placeholder/400/320" alt="Fresh Salad" class="food-image">
+                <div class="food-info">
+                    <h3 class="food-title">Fresh Garden Salad</h3>
+                    <div class="food-tags">
+                        <span class="tag vegetarian">Vegetarian</span>
+                        <span class="tag gluten-free">Gluten-Free</span>
+                    </div>
+                    <div class="food-details">
+                        <p><strong>Donor:</strong> Green Garden Restaurant</p>
+                        <p><strong>Quality:</strong> 
+                            <span class="quality">
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                                <span>☆</span>
+                            </span>
+                        </p>
+                        <div class="contact-info">
+                            <p><strong>Contact:</strong> John Smith</p>
+                            <p><strong>Phone:</strong> (555) 123-4567</p>
+                        </div>
+                        <span class="status ready">Ready for Pickup</span>
+                    </div>
+                    <div class="location-map">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.2133500276957!2d-73.9878584!3d40.7484405!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1682000000000!5m2!1sen!2sus" width="100%" height="150" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Food Item 2 -->
+            <div class="food-card" data-status="pending" data-category="vegan" data-quality="5">
+                <img src="/api/placeholder/400/320" alt="Vegan Pasta" class="food-image">
+                <div class="food-info">
+                    <h3 class="food-title">Vegan Pasta Primavera</h3>
+                    <div class="food-tags">
+                        <span class="tag vegan">Vegan</span>
+                    </div>
+                    <div class="food-details">
+                        <p><strong>Donor:</strong> Harmony Bistro</p>
