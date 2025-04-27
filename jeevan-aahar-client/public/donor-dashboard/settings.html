@@ -16,6 +16,7 @@
             --bg-light: #f9f9f9;
             --white: #ffffff;
             --shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            --danger: #f44336;
         }
         
         * {
@@ -128,6 +129,20 @@
             margin-right: 0.75rem;
             overflow: hidden;
         }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 0.75rem;
+            overflow: hidden;
+        }
         
         .avatar img {
             width: 100%;
@@ -210,12 +225,23 @@
             justify-content: center;
             margin-right: 1.5rem;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
         
         .photo-container img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+        }
+        
+        .photo-container .default-avatar {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--text-light);
         }
         
         .photo-actions {
@@ -252,6 +278,11 @@
         
         .btn-text:hover {
             color: var(--accent);
+        }
+        
+        .btn-text.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
         
         .form-group {
@@ -338,6 +369,165 @@
         .btn-cancel:hover {
             background-color: var(--bg-light);
         }
+        
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--primary);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .toast i {
+            margin-right: 10px;
+        }
+        
+        /* Loading spinner */
+        .spinner {
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top: 2px solid var(--primary);
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Logout button */
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            color: var(--danger);
+            font-weight: 500;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--danger);
+            border-radius: 4px;
+            margin-top: 1rem;
+            transition: all 0.3s;
+            background-color: transparent;
+            font-size: 0.875rem;
+        }
+
+        .logout-btn:hover {
+            background-color: rgba(244, 67, 54, 0.1);
+        }
+
+        .logout-btn i {
+            margin-right: 0.5rem;
+        }
+
+        /* Contact Us */
+        .contact-btn {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            color: var(--text-light);
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .contact-btn:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .contact-btn i {
+            width: 1.5rem;
+            text-align: center;
+            margin-right: 0.75rem;
+            font-size: 1rem;
+        }
+
+        /* Contact Info Panel */
+        .contact-panel {
+            position: fixed;
+            bottom: -150px;
+            left: 0;
+            right: 0;
+            background-color: var(--white);
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            z-index: 999;
+        }
+
+        .contact-panel.show {
+            bottom: 0;
+        }
+
+        .contact-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .contact-panel-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+
+        .contact-info {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .contact-item i {
+            margin-right: 0.75rem;
+            font-size: 1.25rem;
+            color: var(--primary);
+        }
+
+        .contact-item-content a {
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .contact-item-content a:hover {
+            color: var(--primary);
+        }
+
+        .contact-item-label {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            margin-bottom: 0.25rem;
+        }
     </style>
 </head>
 <body>
@@ -345,43 +535,60 @@
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
-                <div class="logo">
-                    <i class="fas fa-utensils"></i>
-                    <a href="#" class="logo">Jeevan<span>Ahaar</span></a>
-                </div>
+              <div class="logo">
+                <i class="fas fa-utensils"></i>
+                <a href="#" class="logo">Jeevan<span>Ahaar</span></a>
+              </div>
             </div>
-            
             <ul class="nav-menu">
-                <li class="nav-item">
-                    <a href="./main.html" class="nav-link">
-                        <i class="fas fa-chart-pie"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="./donation.html" class="nav-link">
-                        <i class="fas fa-gift"></i>
-                        <span>My Donations</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link active">
-                        <i class="fas fa-cog"></i>
-                        <span>Settings</span>
-                    </a>
-                </li>
+              <li class="nav-item">
+                <a href="./dashboard.html" class="nav-link">
+                  <i class="fas fa-th-large"></i>
+                  <span>Dashboard</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="./donation.html" class="nav-link">
+                  <i class="fas fa-hand-holding-heart"></i>
+                  <span>My Donations</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="./notification.html" class="nav-link">
+                  <i class="fas fa-bell"></i>
+                  <span>Notifications</span>
+                  <span class="notification-badge"></span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link active">
+                  <i class="fas fa-cog"></i>
+                  <span>Settings</span>
+                </a>
+              </li>
+              <!-- New Contact Us Button -->
+              <li class="nav-item">
+                <div class="contact-btn" id="contactBtn">
+                  <i class="fas fa-headset"></i>
+                  <span>Contact Us</span>
+                </div>
+              </li>
             </ul>
             
-            <div class="user-profile">
-                <div class="avatar">
-                    <span>SR</span>
-                </div>
-                <div class="user-info">
-                    <div class="user-name">--</div>
-                    <div class="user-role">--</div>
-                </div>
+            <div class="user-profile" style="position:sticky;">
+              <div class="user-avatar" id="userInitials">--</div>
+              <div class="user-info">
+                <div class="user-name" id="userName">--</div>
+                <div class="user-role" id="userRole">--</div>
+              </div>
             </div>
-        </aside>
+            
+            <!-- Logout Button -->
+            <button class="logout-btn" id="logoutBtn">
+              <i class="fas fa-sign-out-alt"></i>
+              Logout
+            </button>
+          </aside>
         
         <!-- Main Content -->
         <div class="main-content">
@@ -395,14 +602,19 @@
                 <div class="settings-section">
                     <h2>Profile Photo</h2>
                     <div class="profile-photo">
-                        <div class="photo-container">
-                            <img src="/api/placeholder/200/200" alt="Profile photo" />
+                        <div class="photo-container" id="photoContainer">
+                            <!-- Default state shows initials or icon -->
+                            <div class="default-avatar" id="defaultAvatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <!-- Photo will be shown here when uploaded -->
+                            <img id="profileImage" style="display: none;" alt="Profile photo" />
                         </div>
                         <div class="photo-actions">
-                            <button class="btn btn-outline">
-                                <i class="fas fa-camera"></i> Change Photo
+                            <button class="btn btn-outline" id="uploadPhotoBtn">
+                                <i class="fas fa-camera"></i> Upload Photo
                             </button>
-                            <button class="btn btn-text">
+                            <button class="btn btn-text disabled" id="removePhotoBtn">
                                 <i class="fas fa-trash-alt"></i> Remove Photo
                             </button>
                         </div>
@@ -511,10 +723,111 @@
             </div>
         </div>
     </div>
+    
+    <!-- Toast notification -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Settings saved successfully!</span>
+    </div>
+
+    <!-- Contact Info Panel -->
+    <div class="contact-panel" id="contactPanel">
+        <div class="contact-panel-header">
+            <div class="contact-panel-title">Contact Information</div>
+            <button class="close-btn" id="closeContactPanel">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="contact-info">
+            <div class="contact-item">
+                <i class="fas fa-phone"></i>
+                <div class="contact-item-content">
+                    <div class="contact-item-label">Phone</div>
+                    <a href="tel:+91-9876543210">+91-9876543210</a>
+                </div>
+            </div>
+            <div class="contact-item">
+                <i class="fas fa-envelope"></i>
+                <div class="contact-item-content">
+                    <div class="contact-item-label">Email</div>
+                    <a href="mailto:support@jeevanahaar.org">support@jeevanahaar.org</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
+        // DOM elements
+        const profileImage = document.getElementById('profileImage');
+        const defaultAvatar = document.getElementById('defaultAvatar');
+        const uploadPhotoBtn = document.getElementById('uploadPhotoBtn');
+        const removePhotoBtn = document.getElementById('removePhotoBtn');
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toastMessage');
+        const contactBtn = document.getElementById('contactBtn');
+        const contactPanel = document.getElementById('contactPanel');
+        const closeContactPanel = document.getElementById('closeContactPanel');
+        const logoutBtn = document.getElementById('logoutBtn');
+        
+        // Check if user has a saved profile photo
+        function checkForExistingPhoto() {
+            // In a real app, you would check localStorage, session or backend
+            const savedPhoto = localStorage.getItem('userProfilePhoto');
+            
+            if (savedPhoto) {
+                // Show the saved photo
+                profileImage.src = savedPhoto;
+                profileImage.style.display = 'block';
+                defaultAvatar.style.display = 'none';
+                removePhotoBtn.classList.remove('disabled');
+            } else {
+                // Show default avatar
+                profileImage.style.display = 'none';
+                defaultAvatar.style.display = 'flex';
+                removePhotoBtn.classList.add('disabled');
+            }
+        }
+        
+        // Show toast notification
+        function showToast(message) {
+            toastMessage.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Handle Contact Us Button
+        contactBtn.addEventListener('click', function() {
+            contactPanel.classList.add('show');
+        });
+
+        // Close Contact Panel
+        closeContactPanel.addEventListener('click', function() {
+            contactPanel.classList.remove('show');
+        });
+
+        // Handle Logout Button
+        logoutBtn.addEventListener('click', function() {
+            // Show a confirmation dialog
+            if (confirm('Are you sure you want to logout?')) {
+                // In a real app, you would clear session/tokens
+                showToast('Logging out...');
+                
+                // Simulate redirection after logout
+                setTimeout(() => {
+                    // Redirect to login page
+                    window.location.href = 'login.html';
+                }, 1500);
+            }
+        });
+        
         // Initialize input fields
         document.addEventListener('DOMContentLoaded', function() {
+            // Check for existing profile photo
+            checkForExistingPhoto();
+            
             // Check all form fields on page load
             const inputFields = document.querySelectorAll('.form-control');
             
@@ -549,12 +862,22 @@
         // Script to handle form submission
         document.querySelector('.btn-primary').addEventListener('click', function(e) {
             e.preventDefault();
-            // Here you would add code to submit the form data
-            alert('Settings saved successfully!');
+            
+            // Show loading state
+            const originalText = this.textContent;
+            this.innerHTML = '<span class="spinner"></span> Saving...';
+            this.disabled = true;
+            
+            // Simulate form submission (replace with actual form handling)
+            setTimeout(() => {
+                this.innerHTML = originalText;
+                this.disabled = false;
+                showToast('Settings saved successfully!');
+            }, 1500);
         });
         
         // Script to handle file upload for profile photo
-        document.querySelector('.btn-outline').addEventListener('click', function() {
+        uploadPhotoBtn.addEventListener('click', function() {
             // Create a file input element
             const fileInput = document.createElement('input');
             fileInput.type = 'file';
@@ -570,7 +893,18 @@
                     
                     reader.onload = function(e) {
                         // Update the profile image
-                        document.querySelector('.photo-container img').src = e.target.result;
+                        profileImage.src = e.target.result;
+                        profileImage.style.display = 'block';
+                        defaultAvatar.style.display = 'none';
+                        
+                        // Enable remove button
+                        removePhotoBtn.classList.remove('disabled');
+                        
+                        // Save to localStorage (in a real app, you'd upload to server)
+                        localStorage.setItem('userProfilePhoto', e.target.result);
+                        
+                        // Show success message
+                        showToast('Profile photo updated successfully!');
                     };
                     
                     reader.readAsDataURL(fileInput.files[0]);
@@ -579,9 +913,31 @@
         });
         
         // Script to handle remove photo
-        document.querySelector('.btn-text').addEventListener('click', function() {
-            // Reset to default placeholder image
-            document.querySelector('.photo-container img').src = '/api/placeholder/200/200';
+        removePhotoBtn.addEventListener('click', function() {
+            // Only proceed if button is not disabled
+            if (this.classList.contains('disabled')) {
+                return;
+            }
+            
+            // Reset to default avatar
+            profileImage.style.display = 'none';
+            defaultAvatar.style.display = 'flex';
+            
+            // Disable remove button
+            removePhotoBtn.classList.add('disabled');
+            
+            // Remove from localStorage
+            localStorage.removeItem('userProfilePhoto');
+            
+            // Show success message
+            showToast('Profile photo removed successfully!');
+        });
+
+        // Close contact panel when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!contactPanel.contains(event.target) && !contactBtn.contains(event.target) && contactPanel.classList.contains('show')) {
+                contactPanel.classList.remove('show');
+            }
         });
     </script>
 </body>

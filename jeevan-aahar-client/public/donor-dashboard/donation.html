@@ -96,6 +96,28 @@
       text-align: center;
     }
 
+    /* Contact Us Button */
+    .contact-btn {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1.5rem;
+      color: var(--light-text);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      gap: 0.75rem;
+      cursor: pointer;
+    }
+
+    .contact-btn:hover {
+      background-color: var(--primary-light);
+      color: var(--primary-dark);
+    }
+
+    .contact-btn i {
+      width: 20px;
+      text-align: center;
+    }
+
     .user-profile {
       padding: 1rem 1.5rem;
       border-top: 1px solid var(--light-grey);
@@ -451,6 +473,75 @@
       cursor: pointer;
     }
 
+    /* Contact Panel */
+    .contact-panel {
+      position: fixed;
+      bottom: -200px;
+      left: 0;
+      right: 0;
+      background-color: var(--white);
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+      z-index: 999;
+    }
+
+    .contact-panel.show {
+      bottom: 0;
+    }
+
+    .contact-panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .contact-panel-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 1.25rem;
+      cursor: pointer;
+      color: var(--light-text);
+    }
+
+    .contact-info {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+    }
+
+    .contact-item i {
+      margin-right: 0.75rem;
+      font-size: 1.25rem;
+      color: var(--primary-color);
+    }
+
+    .contact-item-content a {
+      color: var(--text-color);
+      text-decoration: none;
+    }
+
+    .contact-item-content a:hover {
+      color: var(--primary-color);
+    }
+
+    .contact-item-label {
+      font-size: 0.75rem;
+      color: var(--light-text);
+      margin-bottom: 0.25rem;
+    }
+
     /* Responsive Styles */
     @media (max-width: 768px) {
       .container {
@@ -500,6 +591,11 @@
 
       .filter-form {
         grid-template-columns: 1fr;
+      }
+      
+      .contact-info {
+        flex-direction: column;
+        gap: 1rem;
       }
     }
 
@@ -580,7 +676,31 @@
     </div>
   </div>
 
- 
+  <!-- Contact Info Panel -->
+  <div class="contact-panel" id="contactPanel">
+    <div class="contact-panel-header">
+      <div class="contact-panel-title">Contact Information</div>
+      <button class="close-btn" id="closeContactPanel">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="contact-info">
+      <div class="contact-item">
+        <i class="fas fa-phone"></i>
+        <div class="contact-item-content">
+          <div class="contact-item-label">Phone</div>
+          <a href="tel:+91-9876543210">+91-9876543210</a>
+        </div>
+      </div>
+      <div class="contact-item">
+        <i class="fas fa-envelope"></i>
+        <div class="contact-item-content">
+          <div class="contact-item-label">Email</div>
+          <a href="mailto:support@jeevanahaar.org">support@jeevanahaar.org</a>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="container">
     <aside class="sidebar" id="sidebar">
@@ -592,7 +712,7 @@
       </div>
       <ul class="nav-menu">
         <li class="nav-item">
-          <a href="./main.html" class="nav-link">
+          <a href="./dashboard.html" class="nav-link">
             <i class="fas fa-th-large"></i>
             <span>Dashboard</span>
           </a>
@@ -603,11 +723,24 @@
             <span>My Donations</span>
           </a>
         </li>
+        <li>
+          <a href="./notification.html" class="nav-link">
+            <i class="fas fa-bell"></i>
+            <span>Notifications</span>
+            <span class="notification-badge"></span>
+          </a>
+        </li>
         <li class="nav-item">
           <a href="./settings.html" class="nav-link">
             <i class="fas fa-cog"></i>
             <span>Settings</span>
           </a>
+        </li>
+        <li class="nav-item">
+          <div class="contact-btn" id="contactBtn">
+            <i class="fas fa-headset"></i>
+            <span>Contact Us</span>
+          </div>
         </li>
       </ul>
       <div class="user-profile">
@@ -713,47 +846,397 @@
         </ul>
       </div>
       <script>
-        // DOM Elements
-const filterForm = document.getElementById('filterForm');
+      // Global variables
+let currentPage = 1;
+const rowsPerPage = 10;
+let originalRows = [];
+let filteredRows = [];
+
+// DOM Elements
+const donationsTableBody = document.getElementById('donationsTableBody');
+const donationCount = document.getElementById('donationCount');
+const pagination = document.getElementById('pagination');
+const noResults = document.getElementById('noResults');
+const loader = document.getElementById('loader');
+
+// Form elements
 const dateFromInput = document.getElementById('dateFrom');
 const dateToInput = document.getElementById('dateTo');
 const foodCategorySelect = document.getElementById('foodCategory');
 const statusSelect = document.getElementById('status');
-const resetFilterBtn = document.getElementById('resetFilterBtn');
+const filterForm = document.getElementById('filterForm');
 const applyFilterBtn = document.getElementById('applyFilterBtn');
-const donationsTable = document.getElementById('donationsTable');
-const donationsTableBody = document.getElementById('donationsTableBody');
-const noResults = document.getElementById('noResults');
+const resetFilterBtn = document.getElementById('resetFilterBtn');
 const clearFilters = document.getElementById('clearFilters');
-const loader = document.getElementById('loader');
-const donationCount = document.getElementById('donationCount');
-const pagination = document.getElementById('pagination');
-const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-const sidebar = document.getElementById('sidebar');
-const toast = document.getElementById('toast');
-const toastMessage = document.getElementById('toastMessage');
+
+// Button elements
 const newDonationBtn = document.getElementById('newDonationBtn');
-const prevPageBtn = document.getElementById('prevPage');
-const nextPageBtn = document.getElementById('nextPage');
+const contactBtn = document.getElementById('contactBtn');
+const closeContactPanel = document.getElementById('closeContactPanel');
+const mobileMenuBtn = document.getElementById('mobileMenuBtn') || document.createElement('div'); // Fallback if not found
+const sidebar = document.getElementById('sidebar');
+const contactPanel = document.getElementById('contactPanel');
 
-// Store original table rows for filtering
-const originalRows = Array.from(donationsTableBody.querySelectorAll('tr'));
-let filteredRows = [...originalRows];
-const rowsPerPage = 10;
-let currentPage = 1;
+// Sample data for demonstration (in a real app, this would come from an API)
+const sampleData = [
+  { id: 'D-2025-001', date: '2025-04-15', category: 'Fresh Produce', quantity: 12.5, recipient: 'Sunshine Shelter', status: 'Completed' },
+  { id: 'D-2025-002', date: '2025-04-10', category: 'Canned Goods', quantity: 25, recipient: 'Food Bank Central', status: 'Completed' },
+  { id: 'D-2025-003', date: '2025-04-18', category: 'Bakery Items', quantity: 8, recipient: 'Hope Community Center', status: 'Pending' },
+  { id: 'D-2025-004', date: '2025-04-22', category: 'Dairy Products', quantity: 15, recipient: 'Children\'s Home', status: 'Processing' },
+  { id: 'D-2025-005', date: '2025-04-05', category: 'Packaged Meals', quantity: 30, recipient: 'Elderly Care Home', status: 'Completed' },
+  { id: 'D-2025-006', date: '2025-04-01', category: 'Fresh Produce', quantity: 18, recipient: 'Women\'s Shelter', status: 'Completed' },
+  { id: 'D-2025-007', date: '2025-04-25', category: 'Canned Goods', quantity: 14, recipient: 'Community Kitchen', status: 'Processing' },
+  { id: 'D-2025-008', date: '2025-04-12', category: 'Bakery Items', quantity: 5, recipient: 'Youth Center', status: 'Cancelled' },
+  { id: 'D-2025-009', date: '2025-04-20', category: 'Dairy Products', quantity: 10, recipient: 'Local School', status: 'Pending' },
+  { id: 'D-2025-010', date: '2025-04-08', category: 'Packaged Meals', quantity: 22, recipient: 'Homeless Shelter', status: 'Completed' },
+  { id: 'D-2025-011', date: '2025-04-19', category: 'Fresh Produce', quantity: 17, recipient: 'Recovery Center', status: 'Processing' },
+  { id: 'D-2025-012', date: '2025-04-14', category: 'Bakery Items', quantity: 9, recipient: 'Veteran Support Center', status: 'Completed' }
+];
 
-// Function to show loading state
-function showLoader() {
-  loader.style.display = 'flex';
+// Function to create a table row from data
+function createTableRow(donation) {
+  const row = document.createElement('tr');
+  row.setAttribute('data-id', donation.id);
+  
+  // Format the date
+  const dateObj = new Date(donation.date);
+  const formattedDate = dateObj.toLocaleDateString('en-US', { 
+    year: 'numeric', 
+    month: 'short', 
+    day: 'numeric' 
+  });
+  
+  // Set the status class
+  const statusClass = donation.status.toLowerCase();
+  
+  row.innerHTML = `
+    <td>${donation.id}</td>
+    <td>${formattedDate}</td>
+    <td>${donation.category}</td>
+    <td>${donation.quantity}</td>
+    <td>${donation.recipient}</td>
+    <td><span class="status ${statusClass}">${donation.status}</span></td>
+    <td class="actions">
+      <button class="action-btn view-btn" title="View Details">
+        <i class="fas fa-eye"></i>
+      </button>
+      <button class="action-btn rate-btn" title="Rate Donation">
+        <i class="fas fa-star"></i>
+      </button>
+      <button class="action-btn chat-btn" title="Chat">
+        <i class="fas fa-comments"></i>
+      </button>
+    </td>
+  `;
+  
+  return row;
 }
 
-// Function to hide loading state
-function hideLoader() {
+// Function to load sample data
+function loadSampleData() {
+  // Clear existing rows
+  donationsTableBody.innerHTML = '';
+  
+  // Create rows
+  sampleData.forEach(donation => {
+    const row = createTableRow(donation);
+    donationsTableBody.appendChild(row);
+  });
+  
+  // Store original rows
+  originalRows = Array.from(donationsTableBody.querySelectorAll('tr'));
+  filteredRows = [...originalRows];
+  
+  // Update UI
+  updateTable();
+  updatePagination();
+  updateDonationCount();
+}
+
+// Function to update table with current page of data
+function updateTable() {
+  // Clear existing rows
+  donationsTableBody.innerHTML = '';
+  
+  // If no results, show message
+  if (filteredRows.length === 0) {
+    noResults.classList.remove('hidden');
+    donationsTable.classList.add('hidden');
+    pagination.classList.add('hidden');
+    return;
+  }
+  
+  // Hide no results message
+  noResults.classList.add('hidden');
+  donationsTable.classList.remove('hidden');
+  pagination.classList.remove('hidden');
+  
+  // Calculate start and end indices for current page
+  const startIndex = (currentPage - 1) * rowsPerPage;
+  const endIndex = Math.min(startIndex + rowsPerPage, filteredRows.length);
+  
+  // Add rows for current page
+  for (let i = startIndex; i < endIndex; i++) {
+    donationsTableBody.appendChild(filteredRows[i].cloneNode(true));
+  }
+  
+  // Attach event listeners to action buttons
+  attachActionButtonListeners();
+}
+
+// Function to update pagination
+function updatePagination() {
+  const pageCount = Math.ceil(filteredRows.length / rowsPerPage);
+  
+  // Generate pagination HTML
+  let paginationHTML = `
+    <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+      <a class="page-link" href="#" id="prevPage" aria-label="Previous">
+        <i class="fas fa-chevron-left"></i>
+      </a>
+    </li>
+  `;
+  
+  paginationHTML += generatePageLinks(pageCount);
+  
+  paginationHTML += `
+    <li class="page-item ${currentPage === pageCount ? 'disabled' : ''}">
+      <a class="page-link" href="#" id="nextPage" aria-label="Next">
+        <i class="fas fa-chevron-right"></i>
+      </a>
+    </li>
+  `;
+  
+  // Update pagination container
+  pagination.innerHTML = paginationHTML;
+  
+  // Re-attach pagination event listeners
+  document.getElementById('prevPage')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (currentPage > 1) {
+      currentPage--;
+      updateTable();
+      updatePagination();
+      updateDonationCount();
+    }
+  });
+
+  document.getElementById('nextPage')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    const pageCount = Math.ceil(filteredRows.length / rowsPerPage);
+    if (currentPage < pageCount) {
+      currentPage++;
+      updateTable();
+      updatePagination();
+      updateDonationCount();
+    }
+  });
+
+  // Add click listeners for individual page numbers
+  document.querySelectorAll('.page-number').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      currentPage = parseInt(e.target.dataset.page);
+      updateTable();
+      updatePagination();
+      updateDonationCount();
+    });
+  });
+}
+
+// Function to generate page links for pagination
+function generatePageLinks(pageCount) {
+  let links = '';
+  const maxVisiblePages = 5;
+  
+  // Determine start and end page numbers to display
+  let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+  let endPage = Math.min(pageCount, startPage + maxVisiblePages - 1);
+  
+  // Adjust start page if we're near the end
+  if (endPage - startPage + 1 < maxVisiblePages) {
+    startPage = Math.max(1, endPage - maxVisiblePages + 1);
+  }
+  
+  // First page link if not in visible range
+  if (startPage > 1) {
+    links += `
+      <li class="page-item">
+        <a class="page-link page-number" href="#" data-page="1">1</a>
+      </li>
+      ${startPage > 2 ? '<li class="page-item disabled"><span class="page-link">...</span></li>' : ''}
+    `;
+  }
+  
+  // Visible page links
+  for (let i = startPage; i <= endPage; i++) {
+    links += `
+      <li class="page-item ${i === currentPage ? 'active' : ''}">
+        <a class="page-link page-number" href="#" data-page="${i}">${i}</a>
+      </li>
+    `;
+  }
+  
+  // Last page link if not in visible range
+  if (endPage < pageCount) {
+    links += `
+      ${endPage < pageCount - 1 ? '<li class="page-item disabled"><span class="page-link">...</span></li>' : ''}
+      <li class="page-item">
+        <a class="page-link page-number" href="#" data-page="${pageCount}">${pageCount}</a>
+      </li>
+    `;
+  }
+  
+  return links;
+}
+
+// Function to update donation count
+function updateDonationCount() {
+  const startIndex = (currentPage - 1) * rowsPerPage + 1;
+  const endIndex = Math.min(currentPage * rowsPerPage, filteredRows.length);
+  
+  if (filteredRows.length > 0) {
+    donationCount.textContent = `Showing ${startIndex}-${endIndex} of ${filteredRows.length} donations`;
+  } else {
+    donationCount.textContent = 'No donations found';
+  }
+}
+
+// Function to filter donations
+function filterDonations() {
+  // Show loader
+  loader.style.display = 'flex';
+  
+  // Get filter values
+  const dateFrom = dateFromInput.value;
+  const dateTo = dateToInput.value;
+  const foodCategory = foodCategorySelect.value;
+  const status = statusSelect.value;
+  
+  // Apply filter
+  filteredRows = originalRows.filter(row => {
+    const cells = row.querySelectorAll('td');
+    const rowDate = cells[1].textContent;
+    const rowCategory = cells[2].textContent;
+    const rowStatus = cells[5].querySelector('.status').textContent;
+    
+    // Check date range
+    if (dateFrom && dateTo) {
+      const rowDateObj = new Date(rowDate);
+      const dateFromObj = new Date(dateFrom);
+      const dateToObj = new Date(dateTo);
+      dateToObj.setHours(23, 59, 59); // Include the entire day
+      
+      if (rowDateObj < dateFromObj || rowDateObj > dateToObj) {
+        return false;
+      }
+    }
+    
+    // Check food category
+    if (foodCategory && rowCategory !== foodCategory) {
+      return false;
+    }
+    
+    // Check status
+    if (status && rowStatus !== status) {
+      return false;
+    }
+    
+    return true;
+  });
+  
+  // Reset to first page
+  currentPage = 1;
+  
+  // Update UI
+  updateTable();
+  updatePagination();
+  updateDonationCount();
+  
+  // Hide loader
   loader.style.display = 'none';
 }
 
-// Function to show toast notification
+// Function to reset filters
+function resetFilters() {
+  // Reset form fields
+  const today = new Date();
+  const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+  
+  dateFromInput.valueAsDate = firstDayOfMonth;
+  dateToInput.valueAsDate = today;
+  foodCategorySelect.value = '';
+  statusSelect.value = '';
+  
+  // Reset filtered rows
+  filteredRows = [...originalRows];
+  currentPage = 1;
+  
+  // Update UI
+  updateTable();
+  updatePagination();
+  updateDonationCount();
+}
+
+// Function to attach event listeners to action buttons in the table
+function attachActionButtonListeners() {
+  // View donation details
+  document.querySelectorAll('.view-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const donationId = btn.closest('tr').getAttribute('data-id');
+      // Show donation details (could open a modal or navigate to details page)
+      showToast(`Viewing donation #${donationId}`);
+      // Implementation would depend on your application's needs
+    });
+  });
+  
+  // Rate donation
+  document.querySelectorAll('.rate-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const donationId = btn.closest('tr').getAttribute('data-id');
+      // Open rating modal or page
+      openRatingModal(donationId);
+      showToast(`Rating donation #${donationId}`);
+    });
+  });
+  
+  // Chat about donation
+  document.querySelectorAll('.chat-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const donationId = btn.closest('tr').getAttribute('data-id');
+      // Open chat interface
+      openChatInterface(donationId);
+      showToast(`Opening chat for donation #${donationId}`);
+    });
+  });
+}
+
+// Function to open rating modal (placeholder)
+function openRatingModal(donationId) {
+  // In a real implementation, this would open a modal with rating options
+  console.log(`Opening rating modal for donation ${donationId}`);
+  
+  // Example implementation could be:
+  // const modal = document.getElementById('ratingModal');
+  // document.getElementById('ratingDonationId').textContent = donationId;
+  // modal.classList.add('show');
+}
+
+// Function to open chat interface (placeholder)
+function openChatInterface(donationId) {
+  // In a real implementation, this would open a chat interface
+  console.log(`Opening chat interface for donation ${donationId}`);
+  
+  // Example implementation could be:
+  // window.location.href = `donation-chat.html?id=${donationId}`;
+  // Or open a chat modal/panel
+}
+
+// Toast notification function
 function showToast(message) {
+  const toast = document.getElementById('toast');
+  const toastMessage = document.getElementById('toastMessage');
+  
   toastMessage.textContent = message;
   toast.classList.add('show');
   
@@ -762,270 +1245,105 @@ function showToast(message) {
   }, 3000);
 }
 
-// Function to filter donations
-function filterDonations() {
-  showLoader();
-  
-  const dateFrom = dateFromInput.value ? new Date(dateFromInput.value) : null;
-  const dateTo = dateToInput.value ? new Date(dateToInput.value) : null;
-  const foodCategory = foodCategorySelect.value;
-  const status = statusSelect.value;
-  
-  // Simulate server delay
-  setTimeout(() => {
-    filteredRows = originalRows.filter(row => {
-      // Get row data attributes
-      const rowDate = new Date(row.getAttribute('data-date'));
-      const rowCategory = row.getAttribute('data-category');
-      const rowStatus = row.getAttribute('data-status');
-      
-      // Filter by date range
-      if (dateFrom && rowDate < dateFrom) return false;
-      if (dateTo && rowDate > dateTo) return false;
-      
-      // Filter by food category
-      if (foodCategory && rowCategory !== foodCategory) return false;
-      
-      // Filter by status
-      if (status && rowStatus !== status) return false;
-      
-      return true;
-    });
-    
-    updateTable();
-    hideLoader();
-    
-    if (filteredRows.length === 0) {
-      noResults.classList.remove('hidden');
-      donationsTable.classList.add('hidden');
-      pagination.classList.add('hidden');
-    } else {
-      noResults.classList.add('hidden');
-      donationsTable.classList.remove('hidden');
-      
-      // Update donation count
-      donationCount.textContent = `Showing ${Math.min(filteredRows.length, rowsPerPage)} of ${filteredRows.length} donations`;
-      
-      // Update pagination if needed
-      updatePagination();
-    }
-    
-    showToast('Filters applied successfully');
-  }, 500);
-}
+// Contact panel toggle
+contactBtn.addEventListener('click', () => {
+  contactPanel.classList.add('show');
+});
 
-// Function to reset filters
-function resetFilters() {
-  filterForm.reset();
-  filteredRows = [...originalRows];
-  currentPage = 1;
-  
-  updateTable();
-  updatePagination();
-  
-  noResults.classList.add('hidden');
-  donationsTable.classList.remove('hidden');
-  pagination.classList.remove('hidden');
-  
-  // Update donation count
-  donationCount.textContent = `Showing ${Math.min(filteredRows.length, rowsPerPage)} of ${originalRows.length} donations`;
-  
-  showToast('Filters have been reset');
-}
+closeContactPanel.addEventListener('click', () => {
+  contactPanel.classList.remove('show');
+});
 
-// Function to update the table with filtered results
-function updateTable() {
-  // Clear current table rows
-  donationsTableBody.innerHTML = '';
-  
-  // Calculate start and end indices for current page
-  const startIndex = (currentPage - 1) * rowsPerPage;
-  const endIndex = startIndex + rowsPerPage;
-  
-  // Display only rows for current page
-  const pageRows = filteredRows.slice(startIndex, endIndex);
-  
-  // Add filtered rows to table
-  pageRows.forEach(row => {
-    donationsTableBody.appendChild(row.cloneNode(true));
-  });
-  
-  // Re-attach event listeners to action buttons
-  attachActionButtonListeners();
-}
-
-// Function to update pagination controls
-function updatePagination() {
-  const pageCount = Math.ceil(filteredRows.length / rowsPerPage);
-  
-  if (pageCount <= 1) {
-    pagination.classList.add('hidden');
-    return;
-  } else {
-    pagination.classList.remove('hidden');
+// Close contact panel when clicking outside
+document.addEventListener('click', (e) => {
+  if (contactPanel.classList.contains('show') && 
+      !contactPanel.contains(e.target) && 
+      e.target !== contactBtn) {
+    contactPanel.classList.remove('show');
   }
-  
-  // Generate pagination links
-  const paginationHTML = `
-    <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
-      <a class="page-link" href="#" aria-label="Previous" id="prevPage">
-        <i class="fas fa-chevron-left"></i>
-      </a>
-    </li>
-    ${generatePageLinks(pageCount)}
-    <li class="page-item ${currentPage === pageCount ? 'disabled' : ''}">
-      <a class="page-link" href="#" aria-label="Next" id="nextPage">
-        <i class="fas fa-chevron-right"></i>
-      </a>
-    </li>
-  `;
-  
-  pagination.innerHTML = paginationHTML;
-  
-  // Re-attach pagination event listeners
-  document.getElementById('prevPage').addEventListener('click', goToPreviousPage);
-  document.getElementById('nextPage').addEventListener('click', goToNextPage);
-  
-  // Attach event listeners to page number links
-  document.querySelectorAll('.page-link[data-page]').forEach(link => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      currentPage = parseInt(e.target.getAttribute('data-page'));
-      updateTable();
-      updatePagination();
-    });
+});
+
+// Mobile menu toggle
+if (mobileMenuBtn) {
+  mobileMenuBtn.addEventListener('click', () => {
+    sidebar.classList.toggle('active');
   });
 }
 
-// Generate page number links
-function generatePageLinks(pageCount) {
-  let links = '';
-  
-  for (let i = 1; i <= pageCount; i++) {
-    // Show limited page numbers with ellipsis for many pages
-    if (
-      i === 1 || 
-      i === pageCount || 
-      (i >= currentPage - 1 && i <= currentPage + 1)
-    ) {
-      links += `
-        <li class="page-item ${i === currentPage ? 'active' : ''}">
-          <a class="page-link" href="#" data-page="${i}">${i}</a>
-        </li>
-      `;
-    } else if (
-      (i === currentPage - 2 && currentPage > 3) || 
-      (i === currentPage + 2 && currentPage < pageCount - 2)
-    ) {
-      links += `
-        <li class="page-item disabled">
-          <a class="page-link" href="#">...</a>
-        </li>
-      `;
-    }
+// Close sidebar when clicking outside on mobile
+document.addEventListener('click', (e) => {
+  if (window.innerWidth < 768 && 
+      sidebar.classList.contains('active') && 
+      !sidebar.contains(e.target) && 
+      e.target !== mobileMenuBtn) {
+    sidebar.classList.remove('active');
   }
-  
-  return links;
+});
+
+// New donation button
+if (newDonationBtn) {
+  newDonationBtn.addEventListener('click', () => {
+    // Navigate to new donation page or open modal
+    window.location.href = 'new-donation.html';
+    // Or open a modal: openNewDonationModal();
+  });
 }
 
-// Navigate to previous page
-function goToPreviousPage(e) {
-  e.preventDefault();
-  if (currentPage > 1) {
-    currentPage--;
-    updateTable();
-    updatePagination();
-    window.scrollTo(0, donationsTable.offsetTop - 20);
-  }
+// Event listeners for filter controls
+if (applyFilterBtn) {
+  applyFilterBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    filterDonations();
+  });
 }
 
-// Navigate to next page
-function goToNextPage(e) {
-  e.preventDefault();
-  const pageCount = Math.ceil(filteredRows.length / rowsPerPage);
-  if (currentPage < pageCount) {
-    currentPage++;
-    updateTable();
-    updatePagination();
-    window.scrollTo(0, donationsTable.offsetTop - 20);
-  }
+if (resetFilterBtn) {
+  resetFilterBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    resetFilters();
+  });
 }
 
-// Attach event listeners to action buttons
-function attachActionButtonListeners() {
-  const actionButtons = document.querySelectorAll('.action-btn');
-  
-  actionButtons.forEach(button => {
-    button.addEventListener('click', (e) => {
-      const action = button.getAttribute('title');
-      const donationId = button.closest('tr').querySelector('td:first-child').textContent;
+if (clearFilters) {
+  clearFilters.addEventListener('click', (e) => {
+    e.preventDefault();
+    resetFilters();
+  });
+}
+
+// Add date validation to ensure dateTo is not before dateFrom
+if (dateToInput) {
+  dateToInput.addEventListener('change', () => {
+    if (dateFromInput.value && dateToInput.value) {
+      const dateFrom = new Date(dateFromInput.value);
+      const dateTo = new Date(dateToInput.value);
       
-      if (action === 'Download Receipt') {
-        showToast(`Downloading receipt for ${donationId}`);
-      } else if (action === 'View Details') {
-        showToast(`Viewing details for ${donationId}`);
-      } else if (action === 'Edit Donation') {
-        showToast(`Editing donation ${donationId}`);
-      } else if (action === 'Cancel Donation') {
-        if (confirm(`Are you sure you want to cancel donation ${donationId}?`)) {
-          // Simulate cancellation
-          const row = button.closest('tr');
-          const statusCell = row.querySelector('td:nth-child(6)');
-          statusCell.innerHTML = '<span class="status cancelled">Cancelled</span>';
-          row.setAttribute('data-status', 'Cancelled');
-          
-          // Update actions column
-          const actionsCell = row.querySelector('td:last-child');
-          actionsCell.innerHTML = `
-            <div class="actions">
-              <button class="action-btn" title="View Details"><i class="fas fa-eye"></i></button>
-            </div>
-          `;
-          
-          showToast(`Donation ${donationId} has been cancelled`);
-          attachActionButtonListeners();
-        }
+      if (dateTo < dateFrom) {
+        alert("End date cannot be before start date");
+        dateToInput.value = dateFromInput.value;
       }
-    });
+    }
   });
 }
-
-// Toggle mobile menu
-function toggleMobileMenu() {
-  sidebar.classList.toggle('active');
-}
-
-// Event Listeners
-applyFilterBtn.addEventListener('click', filterDonations);
-resetFilterBtn.addEventListener('click', resetFilters);
-clearFilters.addEventListener('click', (e) => {
-  e.preventDefault();
-  resetFilters();
-});
-mobileMenuBtn.addEventListener('click', toggleMobileMenu);
-newDonationBtn.addEventListener('click', () => {
-  showToast('Create New Donation functionality coming soon!');
-});
 
 // Initialize the page
-function init() {
-  // Set max date for datepickers to today
-  const today = new Date().toISOString().split('T')[0];
-  dateFromInput.setAttribute('max', today);
-  dateToInput.setAttribute('max', today);
+document.addEventListener('DOMContentLoaded', () => {
+  // Set default date range to current month
+  if (dateFromInput && dateToInput) {
+    const today = new Date();
+    const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+    
+    dateFromInput.valueAsDate = firstDayOfMonth;
+    dateToInput.valueAsDate = today;
+  }
   
-  // Initial table setup
-  updateTable();
+  // Load sample data (in a real app, this would fetch from an API)
+  loadSampleData();
+  
+  // Attach event listeners
   attachActionButtonListeners();
-  
-  // Set initial donation count
-  donationCount.textContent = `Showing ${Math.min(originalRows.length, rowsPerPage)} of ${originalRows.length} donations`;
-}
-
-// Run initialization
-init();
+});
       </script>
-    </main>
-  </div>
-</body>
-</html>
+      </main>
+      </body>
+  </html>
