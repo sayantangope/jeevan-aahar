@@ -3,17 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Settings — JeevanAhaar</title>
+    <title>Settings - JeevanAhaar</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script async crossorigin="anonymous"
+    data-clerk-publishable-key="pk_test_dW5pdGVkLWRvZG8tNy5jbGVyay5hY2NvdW50cy5kZXYk"
+    src="https://united-dodo-7.clerk.accounts.dev/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
+    type="text/javascript"></script>
     <style>
         :root {
             --primary-color: #4CAF50;
+            --primary-dark: #388E3C;
+            --primary-light: #C8E6C9;
             --secondary-color: #FF5722;
             --background-color: #f5f5f5;
             --card-color: #ffffff;
             --text-color: #333333;
             --border-color: #e0e0e0;
-            --api-color: #2196F3;
-            --api-light-color: #E3F2FD;
+            --light-text: #666;
+            --lightest-grey: #f9f9f9;
+            --light-grey: #eee;
+            --medium-grey: #ddd;
+            --dark-grey: #aaa;
+            --white: #fff;
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         
         * {
@@ -26,280 +38,287 @@
         body {
             background-color: var(--background-color);
             display: flex;
+            min-height: 100vh;
         }
         
+        /* Sidebar Styles */
         .sidebar {
-            width: 230px;
-            background-color: white;
+            width: 250px;
+            background-color: var(--white);
+            box-shadow: var(--shadow);
+            padding: 1.5rem 0;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
             height: 100vh;
-            border-right: 1px solid var(--border-color);
-            padding-top: 20px;
         }
-        
+
+        .sidebar-header {
+            padding: 0 1.5rem 1.5rem;
+            border-bottom: 1px solid var(--light-grey);
+        }
+
         .logo {
-            padding: 10px 20px;
-            margin-bottom: 30px;
-            color: var(--text-color);
             font-size: 24px;
             font-weight: bold;
-        }
-        
-        .logo span:first-child {
-            color: #FF5722;
-        }
-        
-        .logo span:last-child {
-            color: #4CAF50;
-        }
-        
-        .menu-item {
-            padding: 12px 20px;
-            display: flex;
-            align-items: center;
-            color: var(--text-color);
             text-decoration: none;
-            transition: background-color 0.3s;
-            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        
-        .menu-item.active {
-            background-color: #e8f5e9;
-            color: var(--primary-color);
-            border-left: 4px solid var(--primary-color);
+
+        .logo span:first-child {
+            color: #e74c3c;
         }
-        
-        .menu-item i {
-            margin-right: 12px;
+
+        .logo span:last-child {
+            color: #27ae60;
         }
-        
-        .notification-badge {
-            background-color: var(--secondary-color);
-            color: white;
-            border-radius: 50%;
+
+        .nav-menu {
+            list-style: none;
+            margin-top: 2rem;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            color: var(--light-text);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            gap: 0.75rem;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background-color: var(--primary-light);
+            color: var(--primary-dark);
+        }
+
+        .nav-link i {
             width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            position: absolute;
-            right: 20px;
+            text-align: center;
+        }
+
+        /* User Profile Styles */
+        .profile-container {
+            padding: 1.5rem;
+            border-top: 1px solid var(--light-grey);
+            margin-top: auto;
         }
         
-        .main-content {
-            flex: 1;
-            padding: 30px;
-            max-height: 100vh;
-            overflow-y: auto;
-        }
-        
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-        
-        .page-title {
-            font-size: 24px;
-            color: var(--text-color);
-        }
-        
-        .date {
-            color: #757575;
-            font-size: 14px;
-            margin-top: 5px;
-        }
-        
-        .settings-card {
-            background-color: var(--card-color);
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-            padding: 24px;
-            margin-bottom: 24px;
-        }
-        
-        .profile-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 24px;
-        }
-        
-        .profile-photo-container {
-            position: relative;
-            margin-right: 24px;
-        }
-        
-        .profile-photo {
-            width: 100px;
-            height: 100px;
+        .profile-avatar {
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
-            background-color: #e0e0e0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 36px;
-            font-weight: bold;
-            color: #555;
             overflow: hidden;
+            margin: 0 auto 1rem;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
         }
         
-        .profile-photo img {
+        .profile-avatar img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
         
-        .change-photo-btn {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
+        .profile-info {
+            text-align: center;
+        }
+        
+        .profile-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+            color: var(--text-color);
+        }
+        
+        .profile-role {
+            font-size: 0.8rem;
+            color: var(--light-text);
+            margin-bottom: 0.5rem;
+        }
+        
+        .profile-info p {
+            font-size: 0.8rem;
+            color: var(--light-text);
+            margin-bottom: 0.75rem;
+            word-break: break-word;
+        }
+        
+        .logout-btn {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            width: 100%;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 0.5rem;
+        }
+        
+        .logout-btn:hover {
             background-color: var(--primary-color);
-            color: white;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-        }
-        
-        .profile-details {
-            flex: 1;
-        }
-        
-        .profile-details h2 {
-            margin-bottom: 8px;
-            color: var(--text-color);
-        }
-        
-        .profile-details p {
-            color: #757575;
-        }
-        
-        .settings-form {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-        
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .form-row {
-            display: flex;
-            gap: 16px;
-        }
-        
-        .half {
-            width: 50%;
-        }
-        
-        .settings-input {
-            padding: 10px 12px;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            font-size: 14px;
-        }
-        
-        .settings-input:focus {
-            border-color: var(--primary-color);
-            outline: none;
-        }
-        
-        label {
-            margin-bottom: 8px;
-            color: var(--text-color);
-            font-weight: 500;
-        }
-        
-        .save-settings {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            font-weight: 500;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .save-settings:hover {
-            background-color: #43a047;
-        }
-        
-        .action-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 24px;
-        }
-        
-        .logout-button {
-            background-color: #f5f5f5;
-            border: 1px solid var(--border-color);
-            padding: 10px 16px;
-            border-radius: 4px;
-            color: var(--text-color);
-            font-weight: 500;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .logout-button:hover {
-            background-color: #e0e0e0;
-        }
-        
-        .upload-input {
-            display: none;
+            color: var(--white);
         }
 
-        .user-profile {
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .dashboard-header {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            padding: 15px 20px;
-            margin-top: auto;
-            border-top: 1px solid var(--border-color);
-            position: absolute;
-            bottom: 0;
-            width: 230px;
+            margin-bottom: 2rem;
         }
-        
-        .avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: #e0e0e0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 12px;
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 700;
         }
-        
-        .profile-info {
-            line-height: 1.4;
+
+        /* Settings Styles */
+        .settings-container {
+            background-color: var(--white);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
         }
-        
-        .username {
-            font-weight: bold;
+
+        .settings-section {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .settings-section:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
             color: var(--text-color);
-            font-size: 14px;
         }
-        
-        .role {
-            color: #757575;
-            font-size: 12px;
+
+        .form-group {
+            margin-bottom: 1rem;
         }
-        
-        /* Responsive */
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px var(--primary-light);
+        }
+
+        .form-text {
+            font-size: 0.8rem;
+            color: var(--light-text);
+            margin-top: 0.25rem;
+        }
+
+        .settings-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .settings-btn.primary {
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+        }
+
+        .settings-btn.secondary {
+            background-color: transparent;
+            color: var(--light-text);
+            border: 1px solid var(--border-color);
+        }
+
+        .settings-btn:hover {
+            opacity: 0.9;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--light-grey);
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: var(--white);
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--primary-color);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Responsive Styles */
         @media (max-width: 768px) {
             body {
                 flex-direction: column;
@@ -308,344 +327,209 @@
             .sidebar {
                 width: 100%;
                 height: auto;
-                padding-bottom: 10px;
-            }
-            
-            .user-profile {
-                position: static;
-                width: 100%;
+                padding-bottom: 1rem;
             }
             
             .main-content {
-                padding: 20px;
+                padding: 1rem;
             }
             
-            .form-row {
+            .dashboard-header {
                 flex-direction: column;
-                gap: 16px;
-            }
-            
-            .half {
-                width: 100%;
-            }
-            
-            .action-buttons {
-                flex-direction: column;
-                gap: 16px;
-            }
-            
-            .profile-header {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .profile-photo-container {
-                margin-right: 0;
-                margin-bottom: 16px;
+                align-items: flex-start;
+                gap: 1rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="sidebar">
-        <div class="logo">
-            <span>Jeevan</span><span>Ahaar</span>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-utensils"></i>
+                <span>Jeevan</span><span>Ahaar</span>
+            </div>
         </div>
-        <a href="./dashboard.html" class="menu-item">
-            <i>📊</i> Dashboard
-        </a>
-        <a href="./pickups.html" class="menu-item">
-            <i>📦</i> Food Pickups
-        </a>
-        <a href="./notification.html" class="menu-item">
-            <i>🔔</i> Notifications
-            <span class="notification-badge">7</span>
-        </a>
-        <a href="settings.html" class="menu-item active">
-            <i>⚙️</i> Settings
-        </a>
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="./dashboard.html" class="nav-link">
+                    <i class="fas fa-th-large"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="./requests.html" class="nav-link">
+                    <i class="fas fa-hand-holding-heart"></i>
+                    <span>My Requests</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="./notification.html" class="nav-link">
+                    <i class="fas fa-bell"></i>
+                    <span>Notifications</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="./settings.html" class="nav-link active">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </li>
+        </ul>
         
-        <div class="user-profile">
-            <div class="avatar">OR</div>
+        <!-- User Profile Section -->
+        <div class="profile-container">
+            <div class="profile-avatar">
+                <img id="user-avatar" src="" alt="User Avatar">
+            </div>
             <div class="profile-info">
-                <div class="username">Orphanage</div>
-                <div class="role">Food Receiver</div>
+                <h2 class="profile-name" id="user-name">Welcome, User</h2>
+                <p class="profile-role" id="user-role">Role: Receiver</p>
+                <p id="user-email">Email: user@example.com</p>
+                <button class="logout-btn" onclick="Clerk.signOut().then(() => window.location.href = '../openingpage/index.html')">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
             </div>
         </div>
-    </div>
-    
-    <div class="main-content">
-        <div class="top-bar">
-            <div>
-                <h1 class="page-title">Settings</h1>
-                <div class="date" id="currentDate">Friday, April 25, 2025</div>
-            </div>
-            <button class="save-settings" id="save-settings-btn">
-                <i>💾</i> Save Changes
-            </button>
+    </aside>
+
+    <main class="main-content">
+        <div class="dashboard-header">
+            <h1 class="page-title">Settings</h1>
         </div>
-        
-        <div class="settings-card">
-            <div class="profile-header">
-                <div class="profile-photo-container">
-                    <div class="profile-photo" id="profile-photo">
-                        <span id="profile-initials">OR</span>
-                        <!-- Profile image will be inserted here by JavaScript -->
-                    </div>
-                    <button class="change-photo-btn" id="change-photo-btn">
-                        <i>📷</i>
-                    </button>
-                    <input type="file" id="photo-upload" class="upload-input" accept="image/*">
+
+        <div class="settings-container">
+            <!-- Profile Settings -->
+            <div class="settings-section">
+                <h2 class="section-title">Profile Settings</h2>
+                <div class="form-group">
+                    <label class="form-label">Organization Name</label>
+                    <input type="text" class="form-input" id="orgName" placeholder="Enter organization name">
                 </div>
-                <div class="profile-details">
-                    <h2>Profile Information</h2>
-                    <p>Update your account details and organization information</p>
+                <div class="form-group">
+                    <label class="form-label">Contact Person</label>
+                    <input type="text" class="form-input" id="contactPerson" placeholder="Enter contact person name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Phone Number</label>
+                    <input type="tel" class="form-input" id="phoneNumber" placeholder="Enter phone number">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Address</label>
+                    <input type="text" class="form-input" id="address" placeholder="Enter organization address">
+                </div>
+                <button class="settings-btn primary" id="saveProfile">Save Changes</button>
+            </div>
+
+            <!-- Notification Settings -->
+            <div class="settings-section">
+                <h2 class="section-title">Notification Settings</h2>
+                <div class="form-group">
+                    <label class="form-label">Email Notifications</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="emailNotifications" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <p class="form-text">Receive notifications about new donations and updates via email</p>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Push Notifications</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="pushNotifications" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <p class="form-text">Receive instant notifications on your device</p>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Donation Alerts</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="donationAlerts" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <p class="form-text">Get notified when new donations are available in your area</p>
                 </div>
             </div>
-            
-            <div class="settings-form">
+
+            <!-- Preferences -->
+            <div class="settings-section">
+                <h2 class="section-title">Preferences</h2>
                 <div class="form-group">
-                    <label for="organization-name">Organization Name</label>
-                    <input type="text" id="organization-name" class="settings-input" value="Orphanage">
+                    <label class="form-label">Preferred Food Types</label>
+                    <input type="text" class="form-input" id="foodTypes" placeholder="e.g., Vegetarian, Vegan, Gluten-free">
+                    <p class="form-text">Enter your preferred food types, separated by commas</p>
                 </div>
-                
                 <div class="form-group">
-                    <label for="organization-type">Organization Type</label>
-                    <select id="organization-type" class="settings-input">
-                        <option value="orphanage" selected>Orphanage</option>
-                        <option value="shelter">Shelter</option>
-                        <option value="school">School</option>
-                        <option value="community-center">Community Center</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group half">
-                        <label for="contact-name">Contact Person</label>
-                        <input type="text" id="contact-name" placeholder="Full Name" class="settings-input">
-                    </div>
-                    <div class="form-group half">
-                        <label for="contact-phone">Phone Number</label>
-                        <input type="tel" id="contact-phone" placeholder="+91 98765 43210" class="settings-input">
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" placeholder="organization@example.com" class="settings-input">
-                </div>
-                
-                <div class="form-group">
-                    <label for="address">Address</label>
-                    <textarea id="address" rows="3" class="settings-input"></textarea>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group half">
-                        <label for="city">City</label>
-                        <input type="text" id="city" class="settings-input">
-                    </div>
-                    <div class="form-group half">
-                        <label for="postal-code">Postal Code</label>
-                        <input type="text" id="postal-code" class="settings-input">
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="beneficiaries">Number of Beneficiaries</label>
-                    <input type="number" id="beneficiaries" min="1" class="settings-input">
-                </div>
-                
-                <div class="form-group">
-                    <label for="darpan-id">NGO DARPAN ID</label>
-                    <input type="text" id="darpan-id" class="settings-input" placeholder="Enter your NGO DARPAN ID">
-                </div>
-                
-                <div class="form-group">
-                    <label for="about">About Organization</label>
-                    <textarea id="about" rows="4" class="settings-input" 
-                        placeholder="Tell donors about your organization and the people you serve..."></textarea>
+                    <label class="form-label">Maximum Distance (km)</label>
+                    <input type="number" class="form-input" id="maxDistance" min="1" max="50" value="10">
+                    <p class="form-text">Set the maximum distance you're willing to travel for food pickups</p>
                 </div>
             </div>
-        </div>
-        
-        <div class="settings-card">
-            <h3>Food Preferences</h3>
-            <p style="color: #757575; margin-bottom: 16px;">Specify food types your organization can accept</p>
-            
-            <div style="display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 16px;">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <input type="checkbox" id="veg" checked>
-                    <label for="veg">Vegetarian</label>
+
+            <!-- Account Settings -->
+            <div class="settings-section">
+                <h2 class="section-title">Account Settings</h2>
+                <div class="form-group">
+                    <label class="form-label">Change Password</label>
+                    <input type="password" class="form-input" id="currentPassword" placeholder="Current password">
+                    <input type="password" class="form-input" id="newPassword" placeholder="New password">
+                    <input type="password" class="form-input" id="confirmPassword" placeholder="Confirm new password">
                 </div>
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <input type="checkbox" id="non-veg" checked>
-                    <label for="non-veg">Non-Vegetarian</label>
-                </div>
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <input type="checkbox" id="vegan">
-                    <label for="vegan">Vegan</label>
-                </div>
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <input type="checkbox" id="gluten-free">
-                    <label for="gluten-free">Gluten Free</label>
-                </div>
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <input type="checkbox" id="dairy-free">
-                    <label for="dairy-free">Dairy Free</label>
-                </div>
+                <button class="settings-btn primary" id="changePassword">Update Password</button>
             </div>
-            
-            <div class="form-group">
-                <label for="dietary-notes">Special Dietary Requirements</label>
-                <textarea id="dietary-notes" rows="2" class="settings-input" 
-                    placeholder="Please specify any allergies or special dietary needs..."></textarea>
+
+            <!-- Danger Zone -->
+            <div class="settings-section">
+                <h2 class="section-title">Danger Zone</h2>
+                <div class="form-group">
+                    <label class="form-label">Delete Account</label>
+                    <p class="form-text">Once you delete your account, there is no going back. Please be certain.</p>
+                    <button class="settings-btn secondary" id="deleteAccount">Delete Account</button>
+                </div>
             </div>
         </div>
-        
-        <div class="action-buttons">
-            <button id="logout-btn" class="logout-button">
-                <i>🚪</i> Logout
-            </button>
-        </div>
-    </div>
-    
+    </main>
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Set current date
-            document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-            });
-            
-            // Profile photo handling
-            const profilePhoto = document.getElementById('profile-photo');
-            const profileInitials = document.getElementById('profile-initials');
-            const changePhotoBtn = document.getElementById('change-photo-btn');
-            const photoUpload = document.getElementById('photo-upload');
-            
-            // Load profile photo from localStorage if exists
-            const savedPhoto = localStorage.getItem('profilePhoto');
-            if (savedPhoto) {
-                profileInitials.style.display = 'none';
-                const img = document.createElement('img');
-                img.src = savedPhoto;
-                profilePhoto.appendChild(img);
+        // Initialize Clerk
+        window.addEventListener('load', async () => {
+            await Clerk.load();
+
+            if (!Clerk.user) {
+                window.location.href = "../login.html";
+                return;
             }
-            
-            // Handle profile photo change
-            changePhotoBtn.addEventListener('click', function() {
-                photoUpload.click();
-            });
-            
-            photoUpload.addEventListener('change', function(event) {
-                const file = event.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        // Remove existing image if any
-                        const existingImg = profilePhoto.querySelector('img');
-                        if (existingImg) {
-                            existingImg.remove();
-                        }
-                        
-                        profileInitials.style.display = 'none';
-                        const img = document.createElement('img');
-                        img.src = e.target.result;
-                        profilePhoto.appendChild(img);
-                        
-                        // Save to localStorage
-                        localStorage.setItem('profilePhoto', e.target.result);
-                        
-                        // Update sidebar avatar
-                        const sidebarAvatar = document.querySelector('.avatar');
-                        if (sidebarAvatar) {
-                            sidebarAvatar.innerHTML = '';
-                            const smallImg = document.createElement('img');
-                            smallImg.src = e.target.result;
-                            smallImg.style.width = '100%';
-                            smallImg.style.height = '100%';
-                            smallImg.style.objectFit = 'cover';
-                            sidebarAvatar.appendChild(smallImg);
-                        }
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-            
-            // Save settings
-            document.getElementById('save-settings-btn').addEventListener('click', function() {
-                const settings = {
-                    organizationName: document.getElementById('organization-name').value,
-                    organizationType: document.getElementById('organization-type').value,
-                    contactName: document.getElementById('contact-name').value,
-                    contactPhone: document.getElementById('contact-phone').value,
-                    email: document.getElementById('email').value,
-                    address: document.getElementById('address').value,
-                    city: document.getElementById('city').value,
-                    postalCode: document.getElementById('postal-code').value,
-                    beneficiaries: document.getElementById('beneficiaries').value,
-                    darpanId: document.getElementById('darpan-id').value,
-                    about: document.getElementById('about').value,
-                    dietaryNotes: document.getElementById('dietary-notes').value,
-                    preferences: {
-                        veg: document.getElementById('veg').checked,
-                        nonVeg: document.getElementById('non-veg').checked,
-                        vegan: document.getElementById('vegan').checked,
-                        glutenFree: document.getElementById('gluten-free').checked,
-                        dairyFree: document.getElementById('dairy-free').checked
-                    }
-                };
-                
-                // Save to localStorage
-                localStorage.setItem('userSettings', JSON.stringify(settings));
-                
-                // Update username in sidebar
-                if (settings.organizationName) {
-                    document.querySelector('.username').textContent = settings.organizationName;
-                }
-                
-                alert('Settings saved successfully!');
-            });
-            
-            // Load saved settings
-            const savedSettings = JSON.parse(localStorage.getItem('userSettings') || '{}');
-            
-            // Apply saved settings to form fields
-            if (savedSettings.organizationName) document.getElementById('organization-name').value = savedSettings.organizationName;
-            if (savedSettings.organizationType) document.getElementById('organization-type').value = savedSettings.organizationType;
-            if (savedSettings.contactName) document.getElementById('contact-name').value = savedSettings.contactName;
-            if (savedSettings.contactPhone) document.getElementById('contact-phone').value = savedSettings.contactPhone;
-            if (savedSettings.email) document.getElementById('email').value = savedSettings.email;
-            if (savedSettings.address) document.getElementById('address').value = savedSettings.address;
-            if (savedSettings.city) document.getElementById('city').value = savedSettings.city;
-            if (savedSettings.postalCode) document.getElementById('postal-code').value = savedSettings.postalCode;
-            if (savedSettings.beneficiaries) document.getElementById('beneficiaries').value = savedSettings.beneficiaries;
-            if (savedSettings.darpanId) document.getElementById('darpan-id').value = savedSettings.darpanId;
-            if (savedSettings.about) document.getElementById('about').value = savedSettings.about;
-            if (savedSettings.dietaryNotes) document.getElementById('dietary-notes').value = savedSettings.dietaryNotes;
-            
-            if (savedSettings.preferences) {
-                if (savedSettings.preferences.veg !== undefined) document.getElementById('veg').checked = savedSettings.preferences.veg;
-                if (savedSettings.preferences.nonVeg !== undefined) document.getElementById('non-veg').checked = savedSettings.preferences.nonVeg;
-                if (savedSettings.preferences.vegan !== undefined) document.getElementById('vegan').checked = savedSettings.preferences.vegan;
-                if (savedSettings.preferences.glutenFree !== undefined) document.getElementById('gluten-free').checked = savedSettings.preferences.glutenFree;
-                if (savedSettings.preferences.dairyFree !== undefined) document.getElementById('dairy-free').checked = savedSettings.preferences.dairyFree;
+
+            const user = Clerk.user;
+            const name = user.fullName || user.firstName || 'User';
+            const email = user.primaryEmailAddress.emailAddress;
+            const role = user.publicMetadata.role || 'No role set';
+            const avatar = user.imageUrl;
+
+            document.getElementById('user-name').innerText = `Welcome, ${name}`;
+            document.getElementById('user-email').innerText = `Email: ${email}`;
+            document.getElementById('user-role').innerText = `Role: ${role}`;
+            document.getElementById('user-avatar').src = avatar;
+        });
+
+        // Save Profile Button
+        document.getElementById('saveProfile').addEventListener('click', () => {
+            // Add your save profile logic here
+            alert('Profile settings saved successfully!');
+        });
+
+        // Change Password Button
+        document.getElementById('changePassword').addEventListener('click', () => {
+            // Add your change password logic here
+            alert('Password updated successfully!');
+        });
+
+        // Delete Account Button
+        document.getElementById('deleteAccount').addEventListener('click', () => {
+            if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+                // Add your delete account logic here
+                alert('Account deleted successfully!');
+                window.location.href = '../openingpage/index.html';
             }
-            
-            // Logout button functionality
-            document.getElementById('logout-btn').addEventListener('click', function() {
-                if (confirm('Are you sure you want to logout?')) {
-                    // Clear login status
-                    localStorage.setItem('isLoggedIn', 'false');
-                    
-                    // Redirect to login page
-                    window.location.href = 'login.html';
-                }
-            });
         });
     </script>
 </body>

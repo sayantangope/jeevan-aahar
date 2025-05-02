@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Notifications — JeevanAhaar</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script async crossorigin="anonymous"
+    data-clerk-publishable-key="pk_test_dW5pdGVkLWRvZG8tNy5jbGVyay5hY2NvdW50cy5kZXYk"
+    src="https://united-dodo-7.clerk.accounts.dev/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
+    type="text/javascript"></script>
     <style>
         :root {
             --primary-color: #4CAF50;
@@ -119,41 +123,70 @@
             right: 20px;
         }
 
-        .user-profile {
-            padding: 1rem 1.5rem;
+        /* Fixed: User Profile Styles */
+        .profile-container {
+            padding: 1.5rem;
             border-top: 1px solid var(--light-grey);
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .user-avatar {
-            width: 40px;
-            height: 40px;
+            margin-top: auto;
+          }
+          
+          .profile-avatar {
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
-            background-color: var(--primary-light);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary-dark);
-            font-weight: bold;
-        }
-
-        .user-info {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .user-name {
+            overflow: hidden;
+            margin: 0 auto 1rem;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+          }
+          
+          .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+          
+          .profile-info {
+            text-align: center;
+          }
+          
+          .profile-name {
             font-weight: 600;
-            font-size: 0.9rem;
-        }
-
-        .user-role {
-            font-size: 0.75rem;
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+            color: var(--text-color);
+          }
+          
+          .profile-role {
+            font-size: 0.8rem;
             color: var(--light-text);
-        }
-        
+            margin-bottom: 0.5rem;
+          }
+          
+          .profile-info p {
+            font-size: 0.8rem;
+            color: var(--light-text);
+            margin-bottom: 0.75rem;
+            word-break: break-word;
+          }
+          
+          .logout-btn {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            width: 100%;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 0.5rem;
+          }
+          
+          .logout-btn:hover {
+            background-color: var(--primary-color);
+            color: var(--white);
+          }
         /* Original Main Content Styles */
         .main-content {
             flex: 1;
@@ -652,12 +685,19 @@
             </li>
         </ul>
         
-        <div class="user-profile">
-            <div class="user-avatar">SR</div>
-            <div class="user-info">
-                <div class="user-name">Sarah Reynolds</div>
-                <div class="user-role">Premium Donor</div>
-            </div>
+        <!-- Fixed User Profile Section -->
+        <div class="profile-container">
+          <div class="profile-avatar">
+            <img id="user-avatar" src="" alt="User Avatar">
+          </div>
+          <div class="profile-info">
+            <h2 class="profile-name" id="user-name">Welcome, User</h2>
+            <p class="profile-role" id="user-role">Role: Donor</p>
+            <p id="user-email">Email: user@example.com</p>
+            <button class="logout-btn" onclick="Clerk.signOut().then(() => window.location.href = '../openingpage/index.html')">
+              <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+          </div>
         </div>
     </aside>
     
@@ -925,240 +965,261 @@
                         <input type="text" class="form-control" id="subject" placeholder="Message Subject">
                     </div>
             <script>
-                // Initialize the page when document is loaded
-document.addEventListener('DOMContentLoaded', function() {
-    // Set current date
-    document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', { 
-        weekday: 'long', 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric' 
-    });
-    
-    // Filter buttons
-    const filterButtons = document.querySelectorAll('.filter-button');
-    filterButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            // Remove active class from all buttons
-            filterButtons.forEach(btn => btn.classList.remove('active'));
-            // Add active class to clicked button
-            this.classList.add('active');
-            
-            const filterType = this.textContent.trim();
-            console.log('Filter selected:', filterType);
-            
-            // Get all notification items
-            const notificationItems = document.querySelectorAll('.notification-item');
-            
-            // Show all notifications if "All" is selected
-            if (filterType === 'All') {
-                notificationItems.forEach(item => {
-                    item.style.display = 'flex';
-                });
-                return;
-            }
-            
-            // Filter notifications based on type
-            notificationItems.forEach(item => {
-                const iconElement = item.querySelector('.notification-icon');
-                
-                // Check the icon class to determine the notification type
-                const isRequest = iconElement.classList.contains('icon-request');
-                const isPickup = item.querySelector('.notification-title').textContent.includes('Pickup');
-                const isSystem = iconElement.classList.contains('icon-system') || 
-                              iconElement.classList.contains('icon-alert');
-                
-                if ((filterType === 'Requests' && isRequest) || 
-                    (filterType === 'Pickup' && isPickup) || 
-                    (filterType === 'System' && isSystem)) {
-                    item.style.display = 'flex'; // Show matching notifications
-                } else {
-                    item.style.display = 'none'; // Hide non-matching notifications
-                }
-            });
-        });
-    });
-    
-    // Mark all as read button
-    const markAllReadBtn = document.querySelector('.mark-all-read');
-    markAllReadBtn.addEventListener('click', function() {
-        // Remove unread indicators and background
-        document.querySelectorAll('.notification-item.unread').forEach(item => {
-            item.classList.remove('unread');
-            item.querySelector('.unread-indicator').style.display = 'none';
-        });
-        
-        // Update the badge count
-        document.querySelector('.notification-badge').textContent = '0';
-    });
-    
-    // Notification item click
-    document.querySelectorAll('.notification-item').forEach(item => {
-        item.addEventListener('click', function(e) {
-            // Don't trigger if clicking on an action button
-            if (!e.target.closest('.notification-action')) {
-                // Remove unread status
-                if (this.classList.contains('unread')) {
-                    this.classList.remove('unread');
-                    this.querySelector('.unread-indicator').style.display = 'none';
-                    
-                    // Update badge count
-                    const badge = document.querySelector('.notification-badge');
-                    const currentCount = parseInt(badge.textContent);
-                    badge.textContent = Math.max(0, currentCount - 1);
-                }
-            }
-        });
-    });
-    
-    // Action buttons
-    document.querySelectorAll('.notification-action').forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.stopPropagation(); // Prevent triggering the notification item click
-            
-            const actionType = this.textContent.trim();
-            console.log('Action clicked:', actionType);
-            
-            // Special handling for "Fulfill Request" button
-            if (actionType.includes('Fulfill Request')) {
-                alert('Request accepted! You will be notified when pickup is scheduled.');
-                
-                // Remove the notification
-                const notificationItem = this.closest('.notification-item');
-                notificationItem.style.height = notificationItem.offsetHeight + 'px';
-                notificationItem.style.opacity = '1';
-                
-                setTimeout(() => {
-                    notificationItem.style.height = '0';
-                    notificationItem.style.opacity = '0';
-                    notificationItem.style.padding = '0';
-                    notificationItem.style.overflow = 'hidden';
-                    notificationItem.style.transition = 'all 0.3s ease';
-                    
-                    setTimeout(() => {
-                        notificationItem.remove();
-                    }, 300);
-                }, 10);
-            }
-            
-            // Handle "Dismiss" button
-            if (actionType.includes('Dismiss')) {
-                const notificationItem = this.closest('.notification-item');
-                notificationItem.style.height = notificationItem.offsetHeight + 'px';
-                notificationItem.style.opacity = '1';
-                
-                setTimeout(() => {
-                    notificationItem.style.height = '0';
-                    notificationItem.style.opacity = '0';
-                    notificationItem.style.padding = '0';
-                    notificationItem.style.overflow = 'hidden';
-                    notificationItem.style.transition = 'all 0.3s ease';
-                    
-                    setTimeout(() => {
-                        notificationItem.remove();
-                    }, 300);
-                }, 10);
-            }
-        });
-    });
-    
-    // Load more button
-    const loadMoreBtn = document.querySelector('.load-more');
-    loadMoreBtn.addEventListener('click', function() {
-        console.log('Load more clicked');
-        this.textContent = 'Loading...';
-        
-        // Simulate loading delay
-        setTimeout(() => {
-            this.textContent = 'No more notifications';
-            this.disabled = true;
-            this.style.opacity = '0.6';
-            this.style.cursor = 'default';
-        }, 1000);
-    });
+                // Initialize Clerk
+                window.addEventListener('load', async () => {
+                  await Clerk.load();
 
-    document.addEventListener('DOMContentLoaded', function() {
-        // Contact section toggle
-        const contactBtn = document.getElementById('contactBtn');
-        const contactInfo = document.getElementById('contactInfo');
-        const closeContact = document.getElementById('closeContact');
-        
-        contactBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            contactInfo.style.display = 'block';
-        });
-        
-        closeContact.addEventListener('click', function() {
-            contactInfo.style.display = 'none';
-        });
-        
-        // Form submission handlers
-        const personalInfoForm = document.getElementById('personalInfoForm');
-        const securityForm = document.getElementById('securityForm');
-        const notificationForm = document.getElementById('notificationForm');
-        
-        if (personalInfoForm) {
-            personalInfoForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                alert('Personal information updated successfully!');
-            });
-        }
-        
-        if (securityForm) {
-            securityForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                const newPassword = document.getElementById('newPassword').value;
-                const confirmPassword = document.getElementById('confirmPassword').value;
-                
-                if (newPassword !== confirmPassword) {
-                    alert('Passwords do not match. Please try again.');
+                  if (!Clerk.user) {
+                    window.location.href = "../login.html"; // change path if needed
                     return;
+                  }
+
+                  const user = Clerk.user;
+                  const name = user.fullName || user.firstName || 'User';
+                  const email = user.primaryEmailAddress.emailAddress;
+                  const role = user.publicMetadata.role || 'No role set';
+                  const avatar = user.imageUrl;
+
+                  document.getElementById('user-name').innerText = `Welcome, ${name}`;
+                  document.getElementById('user-email').innerText = `Email: ${email}`;
+                  document.getElementById('user-role').innerText = `Role: ${role}`;
+                  document.getElementById('user-avatar').src = avatar;
+                });
+
+                // Initialize the page when document is loaded
+                document.addEventListener('DOMContentLoaded', function() {
+                    // Set current date
+                    document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', { 
+                        weekday: 'long', 
+                        year: 'numeric', 
+                        month: 'long', 
+                        day: 'numeric' 
+                    });
+                    
+                    // Filter buttons
+                    const filterButtons = document.querySelectorAll('.filter-button');
+                    filterButtons.forEach(button => {
+                        button.addEventListener('click', function() {
+                            // Remove active class from all buttons
+                            filterButtons.forEach(btn => btn.classList.remove('active'));
+                            // Add active class to clicked button
+                            this.classList.add('active');
+                            
+                            const filterType = this.textContent.trim();
+                            console.log('Filter selected:', filterType);
+                            
+                            // Get all notification items
+                            const notificationItems = document.querySelectorAll('.notification-item');
+                            
+                            // Show all notifications if "All" is selected
+                            if (filterType === 'All') {
+                                notificationItems.forEach(item => {
+                                    item.style.display = 'flex';
+                                });
+                                return;
+                            }
+                            
+                            // Filter notifications based on type
+                            notificationItems.forEach(item => {
+                                const iconElement = item.querySelector('.notification-icon');
+                                
+                                // Check the icon class to determine the notification type
+                                const isRequest = iconElement.classList.contains('icon-request');
+                                const isPickup = item.querySelector('.notification-title').textContent.includes('Pickup');
+                                const isSystem = iconElement.classList.contains('icon-system') || 
+                                          iconElement.classList.contains('icon-alert');
+                                
+                                if ((filterType === 'Requests' && isRequest) || 
+                                    (filterType === 'Pickup' && isPickup) || 
+                                    (filterType === 'System' && isSystem)) {
+                                    item.style.display = 'flex'; // Show matching notifications
+                                } else {
+                                    item.style.display = 'none'; // Hide non-matching notifications
+                                }
+                            });
+                        });
+                    });
+                    
+                    // Mark all as read button
+                    const markAllReadBtn = document.querySelector('.mark-all-read');
+                    markAllReadBtn.addEventListener('click', function() {
+                        // Remove unread indicators and background
+                        document.querySelectorAll('.notification-item.unread').forEach(item => {
+                            item.classList.remove('unread');
+                            item.querySelector('.unread-indicator').style.display = 'none';
+                        });
+                        
+                        // Update the badge count
+                        document.querySelector('.notification-badge').textContent = '0';
+                    });
+                    
+                    // Notification item click
+                    document.querySelectorAll('.notification-item').forEach(item => {
+                        item.addEventListener('click', function(e) {
+                            // Don't trigger if clicking on an action button
+                            if (!e.target.closest('.notification-action')) {
+                                // Remove unread status
+                                if (this.classList.contains('unread')) {
+                                    this.classList.remove('unread');
+                                    this.querySelector('.unread-indicator').style.display = 'none';
+                                    
+                                    // Update badge count
+                                    const badge = document.querySelector('.notification-badge');
+                                    const currentCount = parseInt(badge.textContent);
+                                    badge.textContent = Math.max(0, currentCount - 1);
+                                }
+                            }
+                        });
+                    });
+                    
+                    // Action buttons
+                    document.querySelectorAll('.notification-action').forEach(button => {
+                        button.addEventListener('click', function(e) {
+                            e.stopPropagation(); // Prevent triggering the notification item click
+                            
+                            const actionType = this.textContent.trim();
+                            console.log('Action clicked:', actionType);
+                            
+                            // Special handling for "Fulfill Request" button
+                            if (actionType.includes('Fulfill Request')) {
+                                alert('Request accepted! You will be notified when pickup is scheduled.');
+                                
+                                // Remove the notification
+                                const notificationItem = this.closest('.notification-item');
+                                notificationItem.style.height = notificationItem.offsetHeight + 'px';
+                                notificationItem.style.opacity = '1';
+                                
+                                setTimeout(() => {
+                                    notificationItem.style.height = '0';
+                                    notificationItem.style.opacity = '0';
+                                    notificationItem.style.padding = '0';
+                                    notificationItem.style.overflow = 'hidden';
+                                    notificationItem.style.transition = 'all 0.3s ease';
+                                    
+                                    setTimeout(() => {
+                                        notificationItem.remove();
+                                    }, 300);
+                                }, 10);
+                            }
+                            
+                            // Handle "Dismiss" button
+                            if (actionType.includes('Dismiss')) {
+                                const notificationItem = this.closest('.notification-item');
+                                notificationItem.style.height = notificationItem.offsetHeight + 'px';
+                                notificationItem.style.opacity = '1';
+                                
+                                setTimeout(() => {
+                                    notificationItem.style.height = '0';
+                                    notificationItem.style.opacity = '0';
+                                    notificationItem.style.padding = '0';
+                                    notificationItem.style.overflow = 'hidden';
+                                    notificationItem.style.transition = 'all 0.3s ease';
+                                    
+                                    setTimeout(() => {
+                                        notificationItem.remove();
+                                    }, 300);
+                                }, 10);
+                            }
+                        });
+                    });
+                    
+                    // Load more button
+                    const loadMoreBtn = document.querySelector('.load-more');
+                    loadMoreBtn.addEventListener('click', function() {
+                        console.log('Load more clicked');
+                        this.textContent = 'Loading...';
+                        
+                        // Simulate loading delay
+                        setTimeout(() => {
+                            this.textContent = 'No more notifications';
+                            this.disabled = true;
+                            this.style.opacity = '0.6';
+                            this.style.cursor = 'default';
+                        }, 1000);
+                    });
+
+                    document.addEventListener('DOMContentLoaded', function() {
+                        // Contact section toggle
+                        const contactBtn = document.getElementById('contactBtn');
+                        const contactInfo = document.getElementById('contactInfo');
+                        const closeContact = document.getElementById('closeContact');
+                        
+                        contactBtn.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            contactInfo.style.display = 'block';
+                        });
+                        
+                        closeContact.addEventListener('click', function() {
+                            contactInfo.style.display = 'none';
+                        });
+                        
+                        // Form submission handlers
+                        const personalInfoForm = document.getElementById('personalInfoForm');
+                        const securityForm = document.getElementById('securityForm');
+                        const notificationForm = document.getElementById('notificationForm');
+                        
+                        if (personalInfoForm) {
+                            personalInfoForm.addEventListener('submit', function(e) {
+                                e.preventDefault();
+                                alert('Personal information updated successfully!');
+                            });
+                        }
+                        
+                        if (securityForm) {
+                            securityForm.addEventListener('submit', function(e) {
+                                e.preventDefault();
+                                
+                                const newPassword = document.getElementById('newPassword').value;
+                                const confirmPassword = document.getElementById('confirmPassword').value;
+                                
+                                if (newPassword !== confirmPassword) {
+                                    alert('Passwords do not match. Please try again.');
+                                    return;
+                                }
+                                
+                                alert('Password updated successfully!');
+                            });
+                        }
+                        
+                        if (notificationForm) {
+                            notificationForm.addEventListener('submit', function(e) {
+                                e.preventDefault();
+                                alert('Notification preferences saved!');
+                            });
+                        }
+                    });
+
+                    // Mobile menu toggle
+                    if (mobileMenuBtn && sidebar) {
+                        mobileMenuBtn.addEventListener('click', () => {
+                            sidebar.classList.toggle('active');
+                        });
+                        
+                        // Close sidebar when clicking outside on mobile
+                        document.addEventListener('click', (e) => {
+                            if (window.innerWidth < 768 && 
+                                sidebar.classList.contains('active') && 
+                                !sidebar.contains(e.target) && 
+                                e.target !== mobileMenuBtn) {
+                                sidebar.classList.remove('active');
+                            }
+                        });
+                    }
+                });
+
+                // Toast notification function (available globally)
+                function showToast(message) {
+                    const toast = document.getElementById('toast');
+                    const toastMessage = document.getElementById('toastMessage');
+                    
+                    if (toast && toastMessage) {
+                        toastMessage.textContent = message;
+                        toast.classList.add('show');
+                        setTimeout(() => {
+                            toast.classList.remove('show');
+                        }, 3000);
+                    }
                 }
-                
-                alert('Password updated successfully!');
-            });
-        }
-        
-        if (notificationForm) {
-            notificationForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                alert('Notification preferences saved!');
-            });
-        }
-    });
-
-    // Mobile menu toggle
-    if (mobileMenuBtn && sidebar) {
-        mobileMenuBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('active');
-        });
-        
-        // Close sidebar when clicking outside on mobile
-        document.addEventListener('click', (e) => {
-            if (window.innerWidth < 768 && 
-                sidebar.classList.contains('active') && 
-                !sidebar.contains(e.target) && 
-                e.target !== mobileMenuBtn) {
-                sidebar.classList.remove('active');
-            }
-        });
-    }
-});
-
-// Toast notification function (available globally)
-function showToast(message) {
-    const toast = document.getElementById('toast');
-    const toastMessage = document.getElementById('toastMessage');
-    
-    if (toast && toastMessage) {
-        toastMessage.textContent = message;
-        toast.classList.add('show');
-        setTimeout(() => {
-            toast.classList.remove('show');
-        }, 3000);
-    }
-}
             </script>
     </body>
     </html>
