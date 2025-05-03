@@ -1,7 +1,7 @@
 {
   "name": "jeevan-aahar-server",
   "version": "1.0.0",
-  "description": "Backend server for Jeevan Ahaar food donation system",
+  "description": "Backend server for Jeevan Ahaar food donation platform",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
@@ -13,7 +13,8 @@
   "dependencies": {
     "express": "^4.18.2",
     "mongoose": "^7.5.0",
-    "cors": "^2.8.5"
+    "cors": "^2.8.5",
+    "multer": "^1.4.5-lts.1"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
