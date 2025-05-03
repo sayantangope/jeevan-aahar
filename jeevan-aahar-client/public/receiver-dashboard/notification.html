@@ -57,7 +57,7 @@
             padding: 0 1.5rem 1.5rem;
             border-bottom: 1px solid var(--light-grey);
         }
-
+        
         .logo {
             font-size: 24px;
             font-weight: bold;
@@ -66,15 +66,15 @@
             align-items: center;
             gap: 8px;
         }
-
+        
         .logo span:first-child {
             color: #e74c3c;
         }
-
+        
         .logo span:last-child {
             color: #27ae60;
         }
-
+        
         .nav-menu {
             list-style: none;
             margin-top: 2rem;
@@ -94,12 +94,12 @@
             transition: all 0.3s ease;
             gap: 0.75rem;
         }
-
+        
         .nav-link:hover, .nav-link.active {
             background-color: var(--primary-light);
             color: var(--primary-dark);
         }
-
+        
         .nav-link i {
             width: 20px;
             text-align: center;
@@ -183,7 +183,7 @@
             align-items: center;
             margin-bottom: 2rem;
         }
-
+        
         .page-title {
             font-size: 1.5rem;
             font-weight: 700;
@@ -196,7 +196,7 @@
             padding: 1.5rem;
             box-shadow: var(--shadow);
         }
-
+        
         .notification-item {
             display: flex;
             align-items: flex-start;
@@ -204,15 +204,15 @@
             border-bottom: 1px solid var(--border-color);
             transition: all 0.3s ease;
         }
-
+        
         .notification-item:last-child {
             border-bottom: none;
         }
-
+        
         .notification-item:hover {
             background-color: var(--lightest-grey);
         }
-
+        
         .notification-icon {
             width: 40px;
             height: 40px;
@@ -223,31 +223,31 @@
             margin-right: 1rem;
             flex-shrink: 0;
         }
-
+        
         .notification-icon.success {
             background-color: var(--primary-light);
             color: var(--primary-dark);
         }
-
+        
         .notification-icon.warning {
             background-color: #fff3e0;
             color: #e65100;
         }
-
+        
         .notification-icon.info {
             background-color: #e3f2fd;
             color: #0d47a1;
         }
-
+        
         .notification-content {
             flex: 1;
         }
-
+        
         .notification-title {
             font-weight: 600;
             margin-bottom: 0.25rem;
         }
-
+        
         .notification-message {
             color: var(--light-text);
             font-size: 0.9rem;
@@ -258,13 +258,13 @@
             font-size: 0.8rem;
             color: var(--dark-grey);
         }
-
+        
         .notification-actions {
             display: flex;
             gap: 0.5rem;
             margin-top: 0.5rem;
         }
-
+        
         .notification-btn {
             padding: 0.25rem 0.75rem;
             border-radius: 4px;
@@ -272,13 +272,13 @@
             cursor: pointer;
             transition: all 0.3s ease;
         }
-
+        
         .notification-btn.primary {
             background-color: var(--primary-color);
             color: var(--white);
             border: none;
         }
-
+        
         .notification-btn.secondary {
             background-color: transparent;
             color: var(--light-text);
@@ -288,7 +288,7 @@
         .notification-btn:hover {
             opacity: 0.9;
         }
-
+        
         /* Responsive Styles */
         @media (max-width: 768px) {
             body {
@@ -316,9 +316,9 @@
 <body>
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <div class="logo">
+        <div class="logo">
                 <i class="fas fa-utensils"></i>
-                <span>Jeevan</span><span>Ahaar</span>
+            <span>Jeevan</span><span>Ahaar</span>
             </div>
         </div>
         <ul class="nav-menu">
@@ -326,13 +326,13 @@
                 <a href="./dashboard.html" class="nav-link">
                     <i class="fas fa-th-large"></i>
                     <span>Dashboard</span>
-                </a>
+        </a>
             </li>
             <li class="nav-item">
                 <a href="./requests.html" class="nav-link">
                     <i class="fas fa-hand-holding-heart"></i>
                     <span>My Requests</span>
-                </a>
+        </a>
             </li>
             <li class="nav-item">
                 <a href="./notification.html" class="nav-link active">
@@ -344,7 +344,7 @@
                 <a href="./settings.html" class="nav-link">
                     <i class="fas fa-cog"></i>
                     <span>Settings</span>
-                </a>
+        </a>
             </li>
         </ul>
         
@@ -363,16 +363,16 @@
             </div>
         </div>
     </aside>
-
+    
     <main class="main-content">
         <div class="dashboard-header">
-            <h1 class="page-title">Notifications</h1>
+                <h1 class="page-title">Notifications</h1>
             <button class="notification-btn secondary" id="markAllRead">
                 <i class="fas fa-check-double"></i>
                 <span>Mark All as Read</span>
             </button>
         </div>
-
+        
         <div class="notifications-container">
             <div class="notification-item">
                 <div class="notification-icon success">
@@ -387,7 +387,7 @@
                     </div>
                 </div>
             </div>
-
+            
             <div class="notification-item">
                 <div class="notification-icon warning">
                     <i class="fas fa-exclamation-circle"></i>
@@ -401,7 +401,7 @@
                     </div>
                 </div>
             </div>
-
+            
             <div class="notification-item">
                 <div class="notification-icon info">
                     <i class="fas fa-info-circle"></i>
@@ -415,7 +415,7 @@
                     </div>
                 </div>
             </div>
-
+            
             <div class="notification-item">
                 <div class="notification-icon success">
                     <i class="fas fa-check-circle"></i>
@@ -431,7 +431,7 @@
             </div>
         </div>
     </main>
-
+    
     <script>
         // Initialize Clerk
         window.addEventListener('load', async () => {
@@ -439,9 +439,9 @@
 
             if (!Clerk.user) {
                 window.location.href = "../login.html";
-                return;
-            }
-
+            return;
+        }
+        
             const user = Clerk.user;
             const name = user.fullName || user.firstName || 'User';
             const email = user.primaryEmailAddress.emailAddress;
@@ -453,7 +453,7 @@
             document.getElementById('user-role').innerText = `Role: ${role}`;
             document.getElementById('user-avatar').src = avatar;
         });
-
+                    
         // Mark All as Read Button
         document.getElementById('markAllRead').addEventListener('click', () => {
             const notifications = document.querySelectorAll('.notification-item');

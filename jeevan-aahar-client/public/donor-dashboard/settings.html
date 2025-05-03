@@ -53,12 +53,12 @@
             transition: all 0.3s ease;
             height: 100vh;
         }
-
+        
         .sidebar-header {
             padding: 0 1.5rem 1.5rem;
             border-bottom: 1px solid var(--light-grey);
         }
-
+        
         .logo {
             font-size: 24px;
             font-weight: bold;
@@ -75,17 +75,17 @@
         .logo span:last-child {
             color: #27ae60;
         }
-
+        
         .nav-menu {
             list-style: none;
             margin-top: 2rem;
             flex-grow: 1;
         }
-
+        
         .nav-item {
             margin-bottom: 0.5rem;
         }
-
+        
         .nav-link {
             display: flex;
             align-items: center;
@@ -100,12 +100,12 @@
             background-color: var(--primary-light);
             color: var(--primary-dark);
         }
-
+        
         .nav-link i {
             width: 20px;
             text-align: center;
         }
-
+        
         /* User Profile Styles */
         .profile-container {
             padding: 1.5rem;
@@ -170,26 +170,26 @@
             background-color: var(--primary-color);
             color: var(--white);
         }
-
+        
         /* Main Content Styles */
         .main-content {
             flex: 1;
             padding: 2rem;
             overflow-y: auto;
         }
-
+        
         .dashboard-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 2rem;
         }
-
+        
         .page-title {
             font-size: 1.5rem;
             font-weight: 700;
         }
-
+        
         /* Settings Styles */
         .settings-container {
             background-color: var(--white);
@@ -197,19 +197,19 @@
             padding: 1.5rem;
             box-shadow: var(--shadow);
         }
-
+        
         .settings-section {
             margin-bottom: 2rem;
             padding-bottom: 1.5rem;
             border-bottom: 1px solid var(--border-color);
         }
-
+        
         .settings-section:last-child {
             margin-bottom: 0;
             padding-bottom: 0;
             border-bottom: none;
         }
-
+        
         .section-title {
             font-size: 1.1rem;
             font-weight: 600;
@@ -220,7 +220,7 @@
         .form-group {
             margin-bottom: 1rem;
         }
-
+        
         .form-label {
             display: block;
             margin-bottom: 0.5rem;
@@ -258,7 +258,7 @@
             margin-top: 0.25rem;
             display: none;
         }
-
+        
         .form-text {
             font-size: 0.8rem;
             color: var(--light-text);
@@ -320,45 +320,45 @@
     </style>
 </head>
 <body>
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <div class="logo">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+              <div class="logo">
                 <i class="fas fa-utensils"></i>
                 <span>Jeevan</span><span>Ahaar</span>
             </div>
-        </div>
-        <ul class="nav-menu">
-            <li class="nav-item">
+            </div>
+            <ul class="nav-menu">
+              <li class="nav-item">
                 <a href="./dashboard.html" class="nav-link">
-                    <i class="fas fa-th-large"></i>
-                    <span>Dashboard</span>
+                  <i class="fas fa-th-large"></i>
+                  <span>Dashboard</span>
                 </a>
-            </li>
-            <li class="nav-item">
+              </li>
+              <li class="nav-item">
                 <a href="./donations.html" class="nav-link">
-                    <i class="fas fa-hand-holding-heart"></i>
-                    <span>My Donations</span>
+                  <i class="fas fa-hand-holding-heart"></i>
+                  <span>My Donations</span>
                 </a>
-            </li>
-            <li class="nav-item">
+              </li>
+              <li class="nav-item">
                 <a href="./notification.html" class="nav-link">
-                    <i class="fas fa-bell"></i>
-                    <span>Notifications</span>
+                  <i class="fas fa-bell"></i>
+                  <span>Notifications</span>
                 </a>
-            </li>
-            <li class="nav-item">
+              </li>
+              <li class="nav-item">
                 <a href="./settings.html" class="nav-link active">
-                    <i class="fas fa-cog"></i>
-                    <span>Settings</span>
+                  <i class="fas fa-cog"></i>
+                  <span>Settings</span>
                 </a>
-            </li>
-        </ul>
-        
+              </li>
+            </ul>
+            
         <!-- User Profile Section -->
         <div class="profile-container">
             <div class="profile-avatar">
                 <img id="user-avatar" src="" alt="User Avatar">
-            </div>
+              </div>
             <div class="profile-info">
                 <h2 class="profile-name" id="user-name">Welcome, User</h2>
                 <p class="profile-role" id="user-role">Role: Donor</p>
@@ -368,80 +368,80 @@
                 </button>
             </div>
         </div>
-    </aside>
-
+          </aside>
+        
     <main class="main-content">
         <div class="dashboard-header">
             <h1 class="page-title">Settings</h1>
-        </div>
-
-        <div class="settings-container">
+            </div>
+            
+            <div class="settings-container">
             <!-- Profile Settings -->
-            <div class="settings-section">
+                <div class="settings-section">
                 <h2 class="section-title">Profile Settings</h2>
                 <div class="form-group">
                     <label class="form-label required">Full Name</label>
                     <input type="text" class="form-input" id="fullName" placeholder="Enter your full name" required>
                     <div class="error-message" id="fullNameError">Full name is required</div>
-                </div>
+                            </div>
                 <div class="form-group">
                     <label class="form-label required">Email Address</label>
                     <input type="email" class="form-input" id="email" placeholder="Enter your email address" required>
                     <div class="error-message" id="emailError">Valid email address is required</div>
                 </div>
-                <div class="form-group">
+                        <div class="form-group">
                     <label class="form-label required">Phone Number</label>
                     <input type="tel" class="form-input" id="phoneNumber" placeholder="Enter your phone number" required>
                     <div class="error-message" id="phoneError">Phone number is required</div>
-                </div>
-                <div class="form-group">
+                        </div>
+                        <div class="form-group">
                     <label class="form-label required">Address</label>
                     <input type="text" class="form-input" id="address" placeholder="Enter your address" required>
                     <div class="error-message" id="addressError">Address is required</div>
-                </div>
-                <div class="form-group">
+                        </div>
+                        <div class="form-group">
                     <label class="form-label required">City</label>
                     <input type="text" class="form-input" id="city" placeholder="Enter your city" required>
                     <div class="error-message" id="cityError">City is required</div>
                 </div>
-                <div class="form-group">
+                        <div class="form-group">
                     <label class="form-label required">State</label>
                     <input type="text" class="form-input" id="state" placeholder="Enter your state" required>
                     <div class="error-message" id="stateError">State is required</div>
-                </div>
-                <div class="form-group">
+                        </div>
+                        <div class="form-group">
                     <label class="form-label required">Pincode</label>
                     <input type="text" class="form-input" id="pincode" placeholder="Enter your pincode" required>
                     <div class="error-message" id="pincodeError">Pincode is required</div>
-                </div>
+                            </div>
                 <button class="settings-btn primary" id="saveProfile">Save Changes</button>
-            </div>
-
+                        </div>
+                        
             <!-- Notification Settings -->
             <div class="settings-section">
                 <h2 class="section-title">Notification Settings</h2>
-                <div class="form-group">
+                                <div class="form-group">
                     <label class="form-label">Email Notifications</label>
                     <label class="toggle-switch">
                         <input type="checkbox" id="emailNotifications" checked>
                         <span class="toggle-slider"></span>
                     </label>
                     <p class="form-text">Receive notifications about donation requests and updates via email</p>
-                </div>
-                <div class="form-group">
+                            </div>
+                                <div class="form-group">
                     <label class="form-label">Push Notifications</label>
                     <label class="toggle-switch">
                         <input type="checkbox" id="pushNotifications" checked>
                         <span class="toggle-slider"></span>
                     </label>
                     <p class="form-text">Receive instant notifications on your device</p>
-                </div>
-            </div>
-
+                            </div>
+                        </div>
+                        
             <!-- Account Settings -->
             <div class="settings-section">
                 <h2 class="section-title">Account Settings</h2>
-                <div class="form-group">
+                                <div class="form-group">
                     <label class="form-label required">Current Password</label>
                     <input type="password" class="form-input" id="currentPassword" placeholder="Enter current password" required>
                     <div class="error-message" id="currentPasswordError">Current password is required</div>
