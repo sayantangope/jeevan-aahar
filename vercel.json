@@ -24,7 +24,7 @@
     }
   ],
   "env": {
-    "MONGODB_URI": "@MONGO_URI",
+    "MONGODB_URI": "@MONGODB_URI",
     "PORT": "3000"
   }
 }
