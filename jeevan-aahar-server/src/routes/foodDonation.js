@@ -5,10 +5,42 @@ const FoodDonation = require('../models/FoodDonation');
 // Submit a new food donation
 router.post('/submit', async (req, res) => {
     try {
-        const donation = new FoodDonation(req.body);
+        // Parse FormData
+        const data = {};
+        for (let pair of req.body.entries()) {
+            data[pair[0]] = pair[1];
+        }
+
+        // Create donation object
+        const donation = new FoodDonation({
+            donorName: data.donorName,
+            foodName: data.foodName,
+            foodType: data.foodType,
+            quantity: parseInt(data.quantity),
+            location: data.location,
+            pickupTime: data.pickupTime,
+            notes: data.notes,
+            status: 'pending'
+        });
+
+        // Save donation
         await donation.save();
+        
+        // Handle media files if any
+        if (req.body.has('mediaFiles')) {
+            const mediaFiles = [];
+            let i = 0;
+            while (req.body.has(`mediaFiles[${i}]`)) {
+                mediaFiles.push(req.body.get(`mediaFiles[${i}]`));
+                i++;
+            }
+            donation.mediaFiles = mediaFiles;
+            await donation.save();
+        }
+
         res.status(201).json({ message: 'Donation submitted successfully', donation });
     } catch (error) {
+        console.error('Error:', error);
         res.status(400).json({ message: 'Error submitting donation', error: error.message });
     }
 });

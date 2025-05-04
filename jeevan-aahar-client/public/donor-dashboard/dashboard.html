@@ -1,1005 +1,992 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Donor Dashboard</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="../../src/pages/donor-dashboard/main.css">
-   <script async crossorigin="anonymous"
-    data-clerk-publishable-key="pk_test_dW5pdGVkLWRvZG8tNy5jbGVyay5hY2NvdW50cy5kZXYk"
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donor Dashboard — JeevanAhaar</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script async crossorigin="anonymous"
+    data-clerk-publishable-key="pk_test_UGZxZ29vZ2xlLWRvZG8tNy5jbGVyay5hY2NvdW50cy5kZXYk"
     src="https://united-dodo-7.clerk.accounts.dev/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
     type="text/javascript"></script>
-</head>
-<body>
     <style>
         :root {
-          --primary-color: #4CAF50;
-          --primary-dark: #388E3C;
-          --primary-light: #C8E6C9;
-          --accent-color: #FF5722;
-          --text-color: #333;
-          --light-text: #666;
-          --lightest-grey: #f9f9f9;
-          --light-grey: #eee;
-          --medium-grey: #ddd;
-          --dark-grey: #aaa;
-          --white: #fff;
-          --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            --primary-color: #4CAF50;
+            --primary-dark: #388E3C;
+            --primary-light: #C8E6C9;
+            --secondary-color: #FF5722;
+            --background-color: #f5f5f5;
+            --card-color: #ffffff;
+            --text-color: #333333;
+            --border-color: #e0e0e0;
+            --api-color: #2196F3;
+            --api-light-color: #E3F2FD;
+            --white: #ffffff;
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            --light-grey: #eee;
+            --light-text: #666;
         }
-    
+        
         * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-    
+        
         body {
-          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-          color: var(--text-color);
-          background-color: var(--lightest-grey);
-          line-height: 1.6;
+            background-color: var(--background-color);
+            min-height: 100vh;
+            display: flex;
         }
-    
+        
         .container {
-          display: flex;
-          min-height: 100vh;
+            display: flex;
+            width: 100%;
         }
-    
+        
         /* Sidebar Styles */
         .sidebar {
-          width: 250px;
-          background-color: var(--white);
-          box-shadow: var(--shadow);
-          padding: 1.5rem 0;
-          display: flex;
-          flex-direction: column;
-          transition: all 0.3s ease;
+            width: 250px;
+            background-color: var(--white);
+            box-shadow: var(--shadow);
+            padding: 1.5rem 0;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
         }
-    
+        
         .sidebar-header {
-          padding: 0 1.5rem 1.5rem;
-          border-bottom: 1px solid var(--light-grey);
+            padding: 0 1.5rem 1.5rem;
+            border-bottom: 1px solid var(--light-grey);
         }
-    
+        
         .logo {
             font-size: 24px;
             font-weight: bold;
             color: #e74c3c;
             text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
         
         .logo span {
             color: #27ae60;
         }
-    
+        
         .nav-menu {
-          list-style: none;
-          margin-top: 2rem;
-          flex-grow: 1;
+            list-style: none;
+            margin-top: 2rem;
+            flex-grow: 1;
         }
-    
+        
         .nav-item {
-          margin-bottom: 0.5rem;
+            margin-bottom: 0.5rem;
         }
-    
+        
         .nav-link {
-          display: flex;
-          align-items: center;
-          padding: 0.75rem 1.5rem;
-          color: var(--light-text);
-          text-decoration: none;
-          transition: all 0.3s ease;
-          gap: 0.75rem;
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            color: var(--light-text);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            gap: 0.75rem;
+            border-radius: 8px;
+            margin: 0.25rem 0;
         }
-    
+        
         .nav-link:hover, .nav-link.active {
-          background-color: var(--primary-light);
-          color: var(--primary-dark);
+            background-color: var(--primary-light);
+            color: var(--primary-dark);
+            transform: translateX(5px);
         }
-    
+        
         .nav-link i {
-          width: 20px;
-          text-align: center;
+            width: 20px;
+            text-align: center;
+            transition: transform 0.3s ease;
         }
-         /* Fixed: User Profile Styles */
-         .profile-container {
-          padding: 1.5rem;
-          border-top: 1px solid var(--light-grey);
-          margin-top: auto;
+        
+        .nav-link:hover i, .nav-link.active i {
+            transform: scale(1.1);
+        }
+        
+        /* Profile Styles */
+        .profile-container {
+            padding: 1.5rem;
+            border-top: 1px solid var(--light-grey);
+            margin-top: auto;
         }
         
         .profile-avatar {
-          width: 60px;
-          height: 60px;
-          border-radius: 50%;
-          overflow: hidden;
-          margin: 0 auto 1rem;
-          box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto 1rem;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
         }
         
         .profile-avatar img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         
         .profile-info {
-          text-align: center;
+            text-align: center;
         }
         
         .profile-name {
-          font-weight: 600;
-          font-size: 1.1rem;
-          margin-bottom: 0.25rem;
-          color: var(--text-color);
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+            color: var(--text-color);
         }
         
         .profile-role {
-          font-size: 0.8rem;
-          color: var(--light-text);
-          margin-bottom: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--light-text);
+            margin-bottom: 0.5rem;
         }
         
         .profile-info p {
-          font-size: 0.8rem;
-          color: var(--light-text);
-          margin-bottom: 0.75rem;
-          word-break: break-word;
+            font-size: 0.8rem;
+            color: var(--light-text);
+            margin-bottom: 0.75rem;
+            word-break: break-word;
         }
         
         .logout-btn {
-          background-color: transparent;
-          color: var(--primary-color);
-          border: 1px solid var(--primary-color);
-          padding: 0.5rem 1rem;
-          border-radius: 4px;
-          width: 100%;
-          font-size: 0.85rem;
-          font-weight: 500;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          margin-top: 0.5rem;
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            width: 100%;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 0.5rem;
         }
         
         .logout-btn:hover {
-          background-color: var(--primary-color);
-          color: var(--white);
+            background-color: var(--primary-color);
+            color: var(--white);
         }
-    
+        
         /* Main Content Styles */
         .main-content {
-          flex-grow: 1;
-          padding: 2rem;
-          overflow-y: auto;
-        }
-    
-        .header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 2rem;
-        }
-    
-        .greeting {
-          font-size: 1.5rem;
-          font-weight: 700;
-        }
-    
-        .date {
-          color: var(--light-text);
-          font-size: 0.9rem;
-        }
-    
-        .button {
-          background-color: var(--primary-color);
-          color: white;
-          border: none;
-          padding: 0.75rem 1.5rem;
-          border-radius: 4px;
-          font-weight: 600;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          transition: all 0.3s ease;
-        }
-    
-        .button:hover {
-          background-color: var(--primary-dark);
-          transform: translateY(-2px);
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-    
-        /* Stats Cards */
-        .stats-container {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-          gap: 1.5rem;
-          margin-bottom: 2rem;
-        }
-    
-        .stat-card {
-          background-color: var(--white);
-          border-radius: 8px;
-          padding: 1.5rem;
-          box-shadow: var(--shadow);
-          transition: all 0.3s ease;
-        }
-    
-        .stat-card:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-        }
-    
-        .stat-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 1rem;
-        }
-    
-        .stat-title {
-          color: var(--light-text);
-          font-size: 0.9rem;
-        }
-    
-        .stat-icon {
-          width: 40px;
-          height: 40px;
-          border-radius: 8px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: white;
-        }
-    
-        .stat-icon.green {
-          background-color: var(--primary-color);
-        }
-    
-        .stat-icon.orange {
-          background-color: var(--accent-color);
-        }
-    
-        .stat-value {
-          font-size: 1.5rem;
-          font-weight: 700;
-          margin-bottom: 0.25rem;
-        }
-    
-        .stat-description {
-          font-size: 0.8rem;
-          color: var(--light-text);
-        }
-    
-        /* Donations Table */
-        .donations-section {
-          background-color: var(--white);
-          border-radius: 8px;
-          padding: 1.5rem;
-          box-shadow: var(--shadow);
-        }
-    
-        .section-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 1.5rem;
-        }
-    
-        .section-title {
-          font-size: 1.25rem;
-          font-weight: 600;
-        }
-    
-        .view-all {
-          color: var(--primary-color);
-          text-decoration: none;
-          font-size: 0.9rem;
-          font-weight: 500;
-          display: flex;
-          align-items: center;
-          gap: 0.25rem;
-        }
-    
-        .table-container {
-          overflow-x: auto;
-        }
-    
-        .donations-table {
-          width: 100%;
-          border-collapse: collapse;
-        }
-    
-        .donations-table th {
-          text-align: left;
-          padding: 1rem;
-          border-bottom: 2px solid var(--light-grey);
-          color: var(--light-text);
-          font-weight: 600;
-          font-size: 0.9rem;
-        }
-    
-        .donations-table td {
-          padding: 1rem;
-          border-bottom: 1px solid var(--light-grey);
-          color: var(--text-color);
-        }
-    
-        .donations-table tr:last-child td {
-          border-bottom: none;
-        }
-    
-        .donations-table tr:hover {
-          background-color: var(--lightest-grey);
-        }
-    
-        .status {
-          padding: 0.25rem 0.75rem;
-          border-radius: 50px;
-          font-size: 0.8rem;
-          font-weight: 500;
-        }
-    
-        .status.completed {
-          background-color: var(--primary-light);
-          color: var(--primary-dark);
-        }
-    
-        .status.pending {
-          background-color: #FFF3E0;
-          color: #E65100;
-        }
-    
-        .status.processing {
-          background-color: #E3F2FD;
-          color: #0D47A1;
-        }
-    
-        .actions {
-          display: flex;
-          gap: 0.5rem;
-        }
-    
-        .action-btn {
-          width: 30px;
-          height: 30px;
-          border-radius: 50%;
-          border: 1px solid var(--medium-grey);
-          background: var(--white);
-          color: var(--light-text);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          transition: all 0.3s ease;
-        }
-    
-        .action-btn:hover {
-          background-color: var(--primary-color);
-          color: var(--white);
-          border-color: var(--primary-color);
-        }
-    
-        /* Mobile Menu Button */
-        .mobile-menu-btn {
-          display: none;
-          font-size: 1.25rem;
-          background: none;
-          border: none;
-          color: var(--text-color);
-          cursor: pointer;
-        }
-    
-        /* Loading Spinner */
-        .loading-spinner {
-          display: none;
-          text-align: center;
-          padding: 2rem;
-        }
-    
-        .loading-spinner i {
-          font-size: 2rem;
-          color: var(--primary-color);
-          animation: spin 1s linear infinite;
-        }
-    
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-    
-        /* Error Message */
-        .error-message {
-          display: none;
-          background-color: #FFEBEE;
-          color: #B71C1C;
-          padding: 1rem;
-          border-radius: 4px;
-          margin-bottom: 1rem;
+            flex: 1;
+            padding: 2rem;
+            margin-left: 250px;
+            max-height: 100vh;
+            overflow-y: auto;
         }
         
-        /* Contact Us Button Styles */
-        .contact-btn {
-          display: flex;
-          align-items: center;
-          padding: 0.75rem 1.5rem;
-          color: var(--light-text);
-          text-decoration: none;
-          transition: all 0.3s ease;
-          cursor: pointer;
-          gap: 0.75rem;
-        }
-        
-        .contact-btn:hover {
-          background-color: var(--primary-light);
-          color: var(--primary-dark);
-        }
-        
-        .contact-btn i {
-          width: 20px;
-          text-align: center;
-        }
-        
-        /* Contact Info Panel */
-        .contact-panel {
-          position: fixed;
-          bottom: -150px;
-          left: 0;
-          right: 0;
-          background-color: var(--white);
-          box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-          padding: 1.5rem;
-          transition: all 0.3s ease;
-          z-index: 999;
-        }
-        
-        .contact-panel.show {
-          bottom: 0;
-        }
-        
-        .contact-panel-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 1rem;
-        }
-        
-        .contact-panel-title {
-          font-size: 1.125rem;
-          font-weight: 600;
-        }
-        
-        .close-btn {
-          background: none;
-          border: none;
-          font-size: 1.25rem;
-          cursor: pointer;
-          color: var(--light-text);
-        }
-        
-        .contact-info {
-          display: flex;
-          gap: 2rem;
-        }
-        
-        .contact-item {
-          display: flex;
-          align-items: center;
-        }
-        
-        .contact-item i {
-          margin-right: 0.75rem;
-          font-size: 1.25rem;
-          color: var(--primary-color);
-        }
-        
-        .contact-item-content a {
-          color: var(--text-color);
-          text-decoration: none;
-        }
-        
-        .contact-item-content a:hover {
-          color: var(--primary-color);
-        }
-        
-        .contact-item-label {
-          font-size: 0.75rem;
-          color: var(--light-text);
-          margin-bottom: 0.25rem;
-        }
-    
-        /* Responsive Styles */
-        @media (max-width: 1024px) {
-          .stats-container {
-            grid-template-columns: repeat(2, 1fr);
-          }
-        }
-    
-        @media (max-width: 768px) {
-          .container {
-            flex-direction: column;
-          }
-    
-          .sidebar {
-            width: 100%;
-            position: fixed;
-            top: 0;
-            left: -100%;
-            z-index: 100;
-            height: 100vh;
-          }
-    
-          .sidebar.active {
-            left: 0;
-          }
-    
-          .main-content {
-            padding-top: 70px;
-          }
-    
-          .mobile-header {
+        .top-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 2rem;
-            background-color: var(--white);
-            box-shadow: var(--shadow);
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 90;
-          }
-    
-          .mobile-menu-btn {
-            display: block;
-          }
-    
-          .mobile-logo {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--primary-color);
-          }
-          
-          .contact-info {
-            flex-direction: column;
-            gap: 1rem;
-          }
+            margin-bottom: 2rem;
         }
-    
-        @media (max-width: 576px) {
-          .stats-container {
-            grid-template-columns: 1fr;
-          }
-    
-          .header {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 1rem;
-          }
-    
-          .header .button {
-            width: 100%;
-            justify-content: center;
-          }
-    
-          .section-header {
-            flex-direction: column;
-            align-items: flex-start;
+        
+        .page-title {
+            font-size: 1.5rem;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .date {
+            color: var(--light-text);
+            font-size: 0.9rem;
+        }
+        
+        .action-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
             gap: 0.5rem;
-          }
-    
-          .donations-table th:nth-child(3),
-          .donations-table td:nth-child(3) {
+            transition: all 0.3s ease;
+        }
+        
+        .action-button:hover {
+            background-color: #388E3C;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Cards Container */
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .card {
+            background-color: var(--card-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-title {
+            color: var(--light-text);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .card-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .card-subtitle {
+            color: var(--light-text);
+            font-size: 0.8rem;
+        }
+        
+        .icon-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 1rem;
+        }
+        
+        .icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        
+        .green-icon {
+            background-color: var(--primary-color);
+        }
+        
+        .orange-icon {
+            background-color: var(--secondary-color);
+        }
+        
+        .blue-icon {
+            background-color: var(--api-color);
+        }
+        
+        /* Table Styles */
+        .table-container {
+            background-color: var(--card-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            text-align: left;
+            padding: 1rem;
+            background-color: #f9f9f9;
+            color: var(--light-text);
+            font-weight: 600;
+            font-size: 0.9rem;
+            border-bottom: 2px solid var(--light-grey);
+        }
+        
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--light-grey);
+            color: var(--text-color);
+        }
+        
+        .status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: inline-block;
+        }
+        
+        .status.completed {
+            background-color: #E8F5E9;
+            color: #2E7D32;
+        }
+        
+        .status.pending {
+            background-color: #FFF3E0;
+            color: #E65100;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--light-text);
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        
+        .action-btn:hover {
+            background-color: var(--api-light-color);
+            color: var(--api-color);
+        }
+        
+        /* Modal Styles */
+        .modal {
             display: none;
-          }
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
         }
-      </style>
-
-  <div class="container">
-    <aside class="sidebar" id="sidebar">
-      <div class="sidebar-header">
-        <div class="logo">
-          <i class="fas fa-utensils"></i>
-          <a href="#" class="logo">Jeevan<span>Ahaar</span></a>
-        </div>
-      </div>
-      <ul class="nav-menu">
-        <li class="nav-item">
-          <a href="#" class="nav-link active">
-            <i class="fas fa-th-large"></i>
-            <span>Dashboard</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="./donation.html" class="nav-link">
-            <i class="fas fa-hand-holding-heart"></i>
-            <span>My Donations</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="./notification.html" class="nav-link">
-            <i class="fas fa-bell"></i>
-            <span>Notifications</span>
-            <span class="notification-badge"></span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="./settings.html" class="nav-link">
-            <i class="fas fa-cog"></i>
-            <span>Settings</span>
-          </a>
-        </li>
-        <!-- New Contact Us Button -->
-        <li class="nav-item">
-          <div class="contact-btn" id="contactBtn">
-            <i class="fas fa-headset"></i>
-            <span>Contact Us</span>
-          </div>
-        </li>
-      </ul>
-      <div class="profile-container">
-        <div class="profile-avatar">
-          <img id="user-avatar" src="" alt="User Avatar">
-        </div>
-        <div class="profile-info">
-          <h2 class="profile-name" id="user-name">Welcome, User</h2>
-          <p class="profile-role" id="user-role">Role: Donor</p>
-          <p id="user-email">Email: user@example.com</p>
-          <button class="logout-btn" onclick="Clerk.signOut().then(() => window.location.href = '../openingpage/index.html')">
-            <i class="fas fa-sign-out-alt"></i> Logout
-          </button>
-        </div>
-      </div>
-    </aside>
-
-    <main class="main-content">
-      <div class="header">
-        <div>
-          <h1 class="greeting" id="welcomeMessage">Welcome to your Dashboard!</h1>
-          <p class="date" id="currentDate">--</p>
-        </div>
-        <button class="button" id="newDonationBtn">
-            <i class="fas fa-plus"></i>
-            <span>Create New Donation</span>
-          </button>          
-      </div>
-
-      <div class="stats-container">
-        <div class="stat-card">
-          <div class="stat-header">
-            <div class="stat-title">TOTAL DONATIONS</div>
-            <div class="stat-icon green">
-              <i class="fas fa-hand-holding-heart"></i>
-            </div>
-          </div>
-          <div class="stat-value" id="totalDonations">-</div>
-          <div class="stat-description" id="donationsChange">-</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-header">
-            <div class="stat-title">MEALS PROVIDED</div>
-            <div class="stat-icon orange">
-              <i class="fas fa-utensils"></i>
-            </div>
-          </div>
-          <div class="stat-value" id="mealsProvided">-</div>
-          <div class="stat-description" id="mealsChange">-</div>
-        </div>
-      </div>
-
-      <div class="donations-section">
-        <div class="section-header">
-          <h2 class="section-title">Recent Donations</h2>
-          <a href="#" class="view-all">View all <i class="fas fa-chevron-right"></i></a>
-        </div>
-        <div class="table-container">
-          <table class="donations-table">
-            <thead>
-              <tr>
-                <th>Food Name</th>
-                <th>Type</th>
-                <th>Quantity</th>
-                <th>Location</th>
-                <th>Pickup Time</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="donationsTableBody">
-              <!-- Data will be loaded from MongoDB -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </main>
-  </div>
-  
-  <!-- Contact Info Panel -->
-  <div class="contact-panel" id="contactPanel">
-    <div class="contact-panel-header">
-      <div class="contact-panel-title">Contact Information</div>
-      <button class="close-btn" id="closeContactPanel">
-        <i class="fas fa-times"></i>
-      </button>
-    </div>
-    <div class="contact-info">
-      <div class="contact-item">
-        <i class="fas fa-phone"></i>
-        <div class="contact-item-content">
-          <div class="contact-item-label">Phone</div>
-          <a href="tel:+91-9876543210">+91-9876543210</a>
-        </div>
-      </div>
-      <div class="contact-item">
-        <i class="fas fa-envelope"></i>
-        <div class="contact-item-content">
-          <div class="contact-item-label">Email</div>
-          <a href="mailto:support@jeevanahaar.org">support@jeevanahaar.org</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-           // Initialize Clerk
-    window.addEventListener('load', async () => {
-      await Clerk.load();
-
-      if (!Clerk.user) {
-        window.location.href = "../login.html"; // change path if needed
-        return;
-      }
-
-      const user = Clerk.user;
-      const name = user.fullName || user.firstName || 'User';
-      const email = user.primaryEmailAddress.emailAddress;
-      const role = user.publicMetadata.role || 'No role set';
-      const avatar = user.imageUrl;
-
-      document.getElementById('user-name').innerText = `Welcome, ${name}`;
-      document.getElementById('user-email').innerText = `Email: ${email}`;
-      document.getElementById('user-role').innerText = `Role: ${role}`;
-      document.getElementById('user-avatar').src = avatar;
-    });
-    // JavaScript for the dashboard functionality
-    document.addEventListener('DOMContentLoaded', function() {
-      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-      const sidebar = document.getElementById('sidebar');
-      const newDonationBtn = document.getElementById('newDonationBtn');
-      const contactBtn = document.getElementById('contactBtn');
-      const contactPanel = document.getElementById('contactPanel');
-      const closeContactPanel = document.getElementById('closeContactPanel');
-      
-      // Display current date
-      const today = new Date();
-      const options = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
-      document.getElementById('currentDate').textContent = today.toLocaleDateString('en-US', options);
-      
-      // Update new donation button click handler
-      newDonationBtn.addEventListener('click', function() {
-        window.location.href = './donate.html';
-      });
-      
-      // Toggle sidebar on mobile
-      if (mobileMenuBtn) {
-        mobileMenuBtn.addEventListener('click', function() {
-          sidebar.classList.toggle('active');
-          
-          // Change icon based on sidebar state
-          const icon = mobileMenuBtn.querySelector('i');
-          if (sidebar.classList.contains('active')) {
-            icon.classList.remove('fa-bars');
-            icon.classList.add('fa-times');
-          } else {
-            icon.classList.remove('fa-times');
-            icon.classList.add('fa-bars');
-          }
-        });
-      }
-      
-      // Close sidebar when clicking outside on mobile
-      document.addEventListener('click', function(event) {
-        const isClickInsideSidebar = sidebar.contains(event.target);
-        const isClickOnMenuBtn = mobileMenuBtn ? mobileMenuBtn.contains(event.target) : false;
         
-        if (!isClickInsideSidebar && !isClickOnMenuBtn && sidebar.classList.contains('active')) {
-          sidebar.classList.remove('active');
-          if (mobileMenuBtn) {
-            const icon = mobileMenuBtn.querySelector('i');
-            icon.classList.remove('fa-times');
-            icon.classList.add('fa-bars');
-          }
+        .modal-content {
+            background-color: var(--white);
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
         }
-      });
-      
-      // New donation button animation
-      newDonationBtn.addEventListener('click', function() {
-        this.style.transform = 'scale(0.95)';
-        setTimeout(() => {
-          this.style.transform = '';
-        }, 150);
-      });
-      
-      // Add hover animations to stat cards
-      const statCards = document.querySelectorAll('.stat-card');
-      statCards.forEach(card => {
-        card.addEventListener('mouseenter', function() {
-          this.style.transform = 'translateY(-5px)';
-          this.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.1)';
-        });
         
-        card.addEventListener('mouseleave', function() {
-          this.style.transform = '';
-          this.style.boxShadow = '';
-        });
-      });
-      
-      // Action buttons hover effect - Will be applied to dynamically loaded buttons
-      document.addEventListener('mouseover', function(event) {
-        if (event.target.classList.contains('action-btn')) {
-          event.target.style.backgroundColor = '#4CAF50';
-          event.target.style.color = 'white';
-          event.target.style.borderColor = '#4CAF50';
+        .close {
+            position: absolute;
+            right: 1.5rem;
+            top: 1.5rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--light-text);
         }
-      });
-      
-      document.addEventListener('mouseout', function(event) {
-        if (event.target.classList.contains('action-btn')) {
-          event.target.style.backgroundColor = '';
-          event.target.style.color = '';
-          event.target.style.borderColor = '';
-        }
-      });
-      
-      // Contact Us functionality
-      contactBtn.addEventListener('click', function() {
-        contactPanel.classList.add('show');
-      });
-      
-      closeContactPanel.addEventListener('click', function() {
-        contactPanel.classList.remove('show');
-      });
-      
-      // Close contact panel when clicking outside
-      document.addEventListener('click', function(event) {
-        if (!contactPanel.contains(event.target) && !contactBtn.contains(event.target) && contactPanel.classList.contains('show')) {
-          contactPanel.classList.remove('show');
-        }
-      });
-      
-      // Fetch and display donations
-      async function fetchDonations() {
-        try {
-          const response = await fetch('http://localhost:5003/api/donations');
-          if (!response.ok) {
-            throw new Error('Failed to fetch donations');
-          }
-          const donations = await response.json();
-          console.log('Fetched donations:', donations); // Debug log
-          displayDonations(donations);
-          updateStats(donations);
-        } catch (error) {
-          console.error('Error fetching donations:', error);
-          alert('Failed to load donations. Please try again later.');
-        }
-      }
-
-      function displayDonations(donations) {
-        const tableBody = document.getElementById('donationsTableBody');
-        tableBody.innerHTML = '';
-
-        if (donations.length === 0) {
-          const emptyRow = document.createElement('tr');
-          emptyRow.innerHTML = `
-            <td colspan="7" style="text-align: center; padding: 2rem;">
-              <i class="fas fa-inbox" style="font-size: 2rem; color: var(--light-text); margin-bottom: 1rem;"></i>
-              <p>No donations found. Click "Create New Donation" to get started!</p>
-            </td>
-          `;
-          tableBody.appendChild(emptyRow);
-          return;
-        }
-
-        donations.forEach(donation => {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${donation.foodName || 'N/A'}</td>
-            <td>${donation.foodType || 'N/A'}</td>
-            <td>${donation.quantity || '0'}</td>
-            <td>${donation.location || 'N/A'}</td>
-            <td>${donation.pickupTime ? new Date(donation.pickupTime).toLocaleString() : 'N/A'}</td>
-            <td>
-              <span class="status ${donation.status || 'pending'}">
-                ${donation.status || 'pending'}
-              </span>
-            </td>
-            <td>
-              <div class="actions">
-                <button class="action-btn" onclick="viewDonation('${donation._id}')" title="View Details">
-                  <i class="fas fa-eye"></i>
-                </button>
-                <button class="action-btn" onclick="editDonation('${donation._id}')" title="Edit">
-                  <i class="fas fa-edit"></i>
-                </button>
-                <button class="action-btn" onclick="deleteDonation('${donation._id}')" title="Delete">
-                  <i class="fas fa-trash"></i>
-                </button>
-              </div>
-            </td>
-          `;
-          tableBody.appendChild(row);
-        });
-      }
-
-      function updateStats(donations) {
-        const totalDonations = donations.length;
-        const pendingDonations = donations.filter(d => d.status === 'pending').length;
-        const completedDonations = donations.filter(d => d.status === 'completed').length;
         
-        document.getElementById('totalDonations').textContent = totalDonations;
-        document.getElementById('donationsChange').textContent = `${pendingDonations} pending, ${completedDonations} completed`;
-        
-        // Calculate total meals provided (assuming each donation provides meals for quantity people)
-        const totalMeals = donations.reduce((sum, donation) => sum + (parseInt(donation.quantity) || 0), 0);
-        document.getElementById('mealsProvided').textContent = totalMeals;
-        document.getElementById('mealsChange').textContent = 'All time';
-      }
-
-      // Add donation management functions
-      async function viewDonation(id) {
-        try {
-          const response = await fetch(`http://localhost:5003/api/donations/${id}`);
-          if (!response.ok) {
-            throw new Error('Failed to fetch donation details');
-          }
-          const donation = await response.json();
-          // Show donation details in a modal or alert
-          alert(`
-            Donation Details:
-            Food Name: ${donation.foodName}
-            Type: ${donation.foodType}
-            Quantity: ${donation.quantity}
-            Location: ${donation.location}
-            Pickup Time: ${new Date(donation.pickupTime).toLocaleString()}
-            Status: ${donation.status}
-            Notes: ${donation.notes || 'None'}
-          `);
-        } catch (error) {
-          console.error('Error viewing donation:', error);
-          alert('Failed to view donation details. Please try again later.');
-        }
-      }
-
-      async function editDonation(id) {
-        // Redirect to edit page or show edit modal
-        window.location.href = `./donate.html?id=${id}`;
-      }
-
-      async function deleteDonation(id) {
-        if (confirm('Are you sure you want to delete this donation?')) {
-          try {
-            const response = await fetch(`http://localhost:5003/api/donations/${id}`, {
-              method: 'DELETE'
-            });
-            if (!response.ok) {
-              throw new Error('Failed to delete donation');
+        /* Responsive Styles */
+        @media (max-width: 1024px) {
+            .cards-container {
+                grid-template-columns: repeat(2, 1fr);
             }
-            // Refresh the donations list
-            fetchDonations();
-            alert('Donation deleted successfully!');
-          } catch (error) {
-            console.error('Error deleting donation:', error);
-            alert('Failed to delete donation. Please try again later.');
-          }
         }
-      }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                margin-bottom: 1rem;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+            
+            .top-bar {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .action-button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .cards-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .table-container {
+                padding: 1rem;
+            }
+            
+            table {
+                font-size: 0.9rem;
+            }
+            
+            th, td {
+                padding: 0.75rem;
+            }
+        }
 
-      // Initialize the dashboard
-      fetchDonations();
-    });
-  </script>
+        .food-image {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* Simple View Modal Styles */
+        .view-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .view-modal-content {
+            background-color: var(--white);
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+        }
+
+        .view-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .view-modal-title {
+            font-size: 1.25rem;
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        .view-modal-close {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--light-text);
+        }
+
+        .view-modal-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .view-modal-images {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .view-modal-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .view-modal-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .view-modal-info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .view-modal-label {
+            font-size: 0.9rem;
+            color: var(--light-text);
+        }
+
+        .view-modal-value {
+            font-size: 1rem;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        /* Rating Styles */
+        .view-modal-rating {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--light-grey);
+        }
+
+        .rating-title {
+            font-size: 1.1rem;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .rating-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .rating-label {
+            font-size: 0.9rem;
+            color: var(--light-text);
+        }
+
+        .rating-stars {
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .rating-star {
+            color: #FFD700;
+            font-size: 1.1rem;
+        }
+
+        .rating-value {
+            font-size: 0.9rem;
+            color: var(--text-color);
+            font-weight: 500;
+            margin-left: 0.5rem;
+        }
+
+        .action-btn.accept-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .action-btn.accept-btn:hover {
+            background-color: #388E3C;
+        }
+
+        .action-btn.reject-btn {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .action-btn.reject-btn:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar" id="sidebar">
+          <div class="sidebar-header">
+            <div class="logo">
+              <i class="fas fa-utensils"></i>
+              <a href="#" class="logo">Jeevan<span>Ahaar</span></a>
+            </div>
+          </div>
+          <ul class="nav-menu">
+            <li class="nav-item">
+              <a href="#" class="nav-link active">
+                <i class="fas fa-th-large"></i>
+                <span>Dashboard</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="./requests.html" class="nav-link">
+                <i class="fas fa-hand-holding-heart"></i>
+                <span>My Request</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="./notification.html" class="nav-link">
+                <i class="fas fa-bell"></i>
+                <span>Notifications</span>
+                <span class="notification-badge"></span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="./settings.html" class="nav-link">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+              </a>
+            </li>
+            <!-- New Contact Us Button -->
+            <li class="nav-item">
+              <div class="contact-btn" id="contactBtn">
+                <i class="fas fa-headset"></i>
+                <span>Contact Us</span>
+              </div>
+            </li>
+          </ul>
+          <div class="profile-container">
+            <div class="profile-avatar">
+              <img id="user-avatar" src="" alt="User Avatar">
+            </div>
+            <div class="profile-info">
+              <h2 class="profile-name" id="user-name">Welcome, User</h2>
+              <p class="profile-role" id="user-role">Role: Donor</p>
+              <p id="user-email">Email: user@example.com</p>
+              <button class="logout-btn" onclick="Clerk.signOut().then(() => window.location.href = '../openingpage/index.html')">
+                <i class="fas fa-sign-out-alt"></i> Logout
+              </button>
+            </div>
+          </div>
+        </aside>
+    
+    <div class="main-content">
+        <div class="top-bar">
+            <div>
+                <h1 class="page-title">Welcome to your Dashboard!</h1>
+                <div class="date" id="currentDate">Friday, April 25, 2025</div>
+            </div>
+            <button class="action-button" id="requestFoodBtn">
+                <i>+</i> Request Food
+            </button>
+        </div>
+        
+        <div class="cards-container">
+            <div class="card">
+                <div class="card-title">MEALS RECEIVED</div>
+                <div class="card-value" id="mealsReceivedCount">125</div>
+                <div class="card-subtitle">This month</div>
+                <div class="icon-container">
+                    <div class="icon orange-icon">
+                        🍽️
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">UPCOMING DELIVERIES</div>
+                <div class="card-value" id="upcomingDeliveriesCount">3</div>
+                <div class="card-subtitle">Next 7 days</div>
+                <div class="icon-container">
+                    <div class="icon green-icon">
+                        🚚
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">FOOD QUALITY RATING</div>
+                <div class="card-value" id="avgQualityScore">94%</div>
+                <div class="card-subtitle">Average quality score</div>
+                <div class="icon-container">
+                    <div class="icon blue-icon">
+                        🤖
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section-header">
+            <h2 class="section-title">Recent Food Pickups</h2>
+            <a href="#" class="view-all">View all &gt;</a>
+        </div>
+        
+        <div class="table-container">
+            <table class="donations-table">
+                <thead>
+                    <tr>
+                        <th>Donor Name</th>
+                        <th>Food Name</th>
+                        <th>Type</th>
+                        <th>Quantity</th>
+                        <th>Location</th>
+                        <th>Pickup Time</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="donationsTableBody">
+                    <!-- Data will be loaded from MongoDB -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- Food Details Modal -->
+    <div id="foodDetailsModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeFoodDetailsModal">&times;</span>
+            <div class="modal-tabs">
+                <div class="modal-tab active" data-tab="details">Details</div>
+            </div>
+            
+            <div id="detailsTab" class="tab-content active">
+                <!-- Dynamic content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Donate Food Modal -->
+    <div id="donateFoodModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeDonateFoodModal">&times;</span>
+            <h2>Donate Food</h2>
+            <form id="donateFoodForm">
+                <div class="form-group">
+                    <label for="foodName">Food Name</label>
+                    <input type="text" id="foodName" required>
+                </div>
+                <div class="form-group">
+                    <label for="foodType">Food Type</label>
+                    <select id="foodType" required>
+                        <option value="">Select a type</option>
+                        <option value="Main Course">Main Course</option>
+                        <option value="Breakfast Items">Breakfast Items</option>
+                        <option value="Desserts">Desserts</option>
+                        <option value="Vegetables & Fruits">Vegetables & Fruits</option>
+                        <option value="Beverages">Beverages</option>
+                        <option value="Dry Rations">Dry Rations</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="quantity">Quantity</label>
+                    <input type="number" id="quantity" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="location">Location</label>
+                    <input type="text" id="location" required>
+                </div>
+                <div class="form-group">
+                    <label for="pickupTime">Pickup Time</label>
+                    <input type="datetime-local" id="pickupTime" required>
+                </div>
+                <button type="submit" class="submit-donation">Submit Donation</button>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // Initialize Clerk
+        window.addEventListener('load', async () => {
+            await Clerk.load();
+
+            if (!Clerk.user) {
+                window.location.href = "../login.html";
+                return;
+            }
+
+            const user = Clerk.user;
+            const name = user.fullName || user.firstName || 'User';
+            const email = user.primaryEmailAddress.emailAddress;
+            const role = user.publicMetadata.role || 'No role set';
+            const avatar = user.imageUrl;
+
+            document.getElementById('user-name').innerText = `Welcome, ${name}`;
+            document.getElementById('user-email').innerText = `Email: ${email}`;
+            document.getElementById('user-role').innerText = `Role: ${role}`;
+            document.getElementById('user-avatar').src = avatar;
+        });
+
+        // Function to format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+        }
+
+        // Function to update donation status
+        async function updateDonationStatus(donationId, newStatus) {
+            try {
+                const response = await fetch(`http://localhost:5003/api/donations/${donationId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ status: newStatus })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to update status');
+                }
+
+                // Show success message
+                alert(`Donation ${newStatus} successfully!`);
+                
+                // Reload donations to reflect changes
+                loadDonations();
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to update donation status');
+            }
+        }
+
+        // Function to load donations
+        async function loadDonations() {
+            try {
+                const response = await fetch('http://localhost:5003/api/donations');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch donations');
+                }
+                const donations = await response.json();
+
+                // Update statistics
+                const totalDonations = donations.length;
+                const pendingDonations = donations.filter(d => d.status === 'pending').length;
+                const completedDonations = donations.filter(d => d.status === 'completed').length;
+
+                document.getElementById('totalDonationsCount').textContent = totalDonations;
+                document.getElementById('pendingDonationsCount').textContent = pendingDonations;
+                document.getElementById('completedDonationsCount').textContent = completedDonations;
+
+                // Update donations table
+                const tbody = document.querySelector('table tbody');
+                tbody.innerHTML = '';
+
+                if (donations.length === 0) {
+                    const emptyRow = document.createElement('tr');
+                    emptyRow.innerHTML = `
+                        <td colspan="7" style="text-align: center; padding: 2rem;">
+                            <i class="fas fa-inbox" style="font-size: 2rem; color: var(--light-text); margin-bottom: 1rem;"></i>
+                            <p>No donations available at the moment.</p>
+                        </td>
+                    `;
+                    tbody.appendChild(emptyRow);
+                    return;
+                }
+
+                donations.forEach(donation => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${donation.foodName || 'N/A'}</td>
+                        <td>${donation.foodType || 'N/A'}</td>
+                        <td>${donation.quantity || '0'}</td>
+                        <td>${donation.location || 'N/A'}</td>
+                        <td>${donation.pickupTime ? new Date(donation.pickupTime).toLocaleString() : 'N/A'}</td>
+                        <td>
+                            <span class="status ${donation.status || 'pending'}">
+                                ${donation.status || 'pending'}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="actions">
+                                <button class="action-btn view-btn" onclick="viewDonationDetails('${donation._id}')" title="View Details">
+                                    <i class="fas fa-eye"></i> View (${donation.foodName || 'N/A'})
+                                </button>
+                            </div>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to load donations');
+            }
+        }
+
+        // Function to view donation details
+        async function viewDonationDetails(donationId) {
+            try {
+                if (!donationId) {
+                    throw new Error('Donation ID is required');
+                }
+
+                // Log the donation ID for debugging
+                console.log('Fetching donation with ID:', donationId);
+
+                const response = await fetch(`http://localhost:5003/api/donations/${donationId}`);
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || `Failed to fetch donation details: ${response.statusText}`);
+                }
+
+                const donation = await response.json();
+                if (!donation) {
+                    throw new Error('No donation data received');
+                }
+
+                // Log the received donation data for debugging
+                console.log('Received donation data:', donation);
+
+                // Update modal content with donation details
+                document.getElementById('viewFoodName').textContent = donation.foodName || 'N/A';
+                document.getElementById('viewFoodType').textContent = donation.foodType || 'N/A';
+                document.getElementById('viewQuantity').textContent = donation.quantity || '0';
+                document.getElementById('viewDonorName').textContent = donation.donorName || 'N/A';
+                document.getElementById('viewPickupTime').textContent = formatDate(donation.pickupTime) || 'N/A';
+                document.getElementById('viewPickupLocation').textContent = donation.location || 'N/A';
+                document.getElementById('viewNotes').textContent = donation.notes || 'No notes provided';
+                
+                // Update media files if available
+                const mediaFilesContainer = document.getElementById('viewMediaFiles');
+                if (donation.mediaFiles && donation.mediaFiles.length > 0) {
+                    mediaFilesContainer.innerHTML = donation.mediaFiles.map(filePath => 
+                        `<img src="${filePath}" alt="Food Image" class="view-modal-image">`
+                    ).join('');
+                } else {
+                    mediaFilesContainer.innerHTML = '<p>No media files available</p>';
+                }
+                
+                // Show modal
+                document.getElementById('viewModal').style.display = 'block';
+            } catch (error) {
+                console.error('Error in viewDonationDetails:', error);
+                alert(`Error: ${error.message}`);
+            }
+        }
+
+        // Function to close the view modal
+        function closeViewModal() {
+            document.getElementById('viewModal').style.display = 'none';
+        }
+
+        // Load donations when page loads
+        document.addEventListener('DOMContentLoaded', loadDonations);
+    </script>
 </body>
 </html>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clerk-sdk/2.0.0/clerk-sdk.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <style>
+        /* Global Styles */
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #FF9800;
+            --api-color: #2196F3;
+            --api-light-color: #BBDEFB;
+            --card-color: #FFFFFF;
+            --text-color: #333333;
+            --light-text: #666666;
+            --light-grey: #E0E0E0;
+            --white: #FFFFFF;
+            --shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--light-grey);
+            margin: 0;
+            padding: 0;
+        }

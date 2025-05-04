@@ -96,39 +96,41 @@ app.post('/api/donations', upload.array('mediaFiles'), async (req, res) => {
     console.log('Request body:', req.body);
     console.log('Files:', req.files);
     
-    const { foodName, foodType, quantity, location, pickupTime, notes } = req.body;
-    
+    // Parse FormData
+    const data = {};
+    for (let pair of Object.entries(req.body)) {
+      data[pair[0]] = pair[1];
+    }
+
     // Validate required fields
-    if (!foodName || !foodType || !quantity || !location || !pickupTime) {
-      console.log('Missing required fields:', { foodName, foodType, quantity, location, pickupTime });
+    if (!data.foodName || !data.foodType || !data.quantity || !data.location || !data.pickupTime || !data.donorName) {
+      console.log('Missing required fields:', data);
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
     // Validate quantity
-    if (isNaN(quantity) || quantity <= 0) {
+    if (isNaN(data.quantity) || data.quantity <= 0) {
       return res.status(400).json({ error: 'Quantity must be a positive number' });
     }
 
     const mediaFiles = req.files ? req.files.map(file => file.path) : [];
 
     const donation = new Donation({
-      foodName,
-      foodType,
-      quantity: Number(quantity),
-      location,
-      pickupTime: new Date(pickupTime),
+      contactNumber: data.contactNumber,
+      foodName: data.foodName,
+      foodType: data.foodType,
+      quantity: Number(data.quantity),
+      location: data.location,
+      pickupTime: new Date(data.pickupTime),
       mediaFiles,
-      notes
+      notes: data.notes
     });
 
     await donation.save();
-    res.status(201).json(donation);
+    res.status(201).json({ message: 'Donation submitted successfully', donation });
   } catch (error) {
-    console.error('Error creating donation:', error);
-    res.status(500).json({ 
-      error: 'Failed to create donation',
-      details: error.message 
-    });
+    console.error('Error:', error);
+    res.status(400).json({ message: 'Error submitting donation', error: error.message });
   }
 });
 
@@ -145,12 +147,44 @@ app.get('/api/donations', async (req, res) => {
   }
 });
 
+// Add GET endpoint for single donation
+app.get('/api/donations/:id', async (req, res) => {
+  try {
+    // Validate if the ID is a valid MongoDB ObjectId
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid donation ID format' });
+    }
+
+    const donation = await Donation.findById(req.params.id);
+    
+    if (!donation) {
+      return res.status(404).json({ error: 'Donation not found' });
+    }
+
+    // Convert the donation to a plain object and add the full URL for media files
+    const donationObj = donation.toObject();
+    if (donationObj.mediaFiles && donationObj.mediaFiles.length > 0) {
+      donationObj.mediaFiles = donationObj.mediaFiles.map(filePath => 
+        `http://localhost:${PORT}/${filePath}`
+      );
+    }
+
+    res.json(donationObj);
+  } catch (error) {
+    console.error('Error fetching donation:', error);
+    res.status(500).json({ 
+      error: 'Failed to fetch donation',
+      details: error.message 
+    });
+  }
+});
+
 app.put('/api/donations/:id', async (req, res) => {
   try {
     const { status } = req.body;
     
     // Validate status
-    if (!['pending', 'completed', 'cancelled'].includes(status)) {
+    if (!['pending', 'completed', 'cancelled', 'accepted', 'rejected'].includes(status)) {
       return res.status(400).json({ error: 'Invalid status' });
     }
 

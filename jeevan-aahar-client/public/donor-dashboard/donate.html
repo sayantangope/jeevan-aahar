@@ -3,88 +3,160 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Food Donation Form</title>
+  <title>Food Donation Form - JeevanAhaar</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 20px;
-      background-color: #f5f5f5;
+    :root {
+      --primary-color: #2e7d32;
+      --primary-dark: #1b5e20;
+      --primary-light: #c8e6c9;
+      --background-color: #f5f5f5;
+      --text-color: #333;
+      --border-color: #e0e0e0;
+      --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--background-color);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
     .container {
       background-color: white;
       padding: 30px;
       border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      box-shadow: var(--shadow);
+      max-width: 800px;
+      margin: 0 auto;
     }
+
     h1 {
-      color: #2e7d32;
+      color: var(--primary-color);
       text-align: center;
       margin-bottom: 30px;
+      font-size: 2rem;
     }
+
     .form-group {
-      margin-bottom: 20px;
+      margin-bottom: 24px;
     }
+
     label {
       display: block;
       margin-bottom: 8px;
       font-weight: bold;
-      color: #333;
+      color: var(--text-color);
     }
+
     input, select, textarea {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       font-size: 16px;
-      border: 1px solid #ccc;
+      border: 1px solid var(--border-color);
       border-radius: 4px;
       box-sizing: border-box;
+      transition: border-color 0.3s ease;
     }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--primary-color);
+      outline: none;
+    }
+
     .upload-btn {
       width: 100%;
-      padding: 10px;
-      background: #e0e0e0;
-      border: 1px solid #bbb;
+      padding: 12px;
+      background: var(--primary-light);
+      border: 1px solid var(--border-color);
       border-radius: 4px;
       cursor: pointer;
       text-align: center;
-      margin-top: 5px;
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
+
+    .upload-btn:hover {
+      background: var(--primary-color);
+      color: white;
+    }
+
     .preview-container {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
-      border: 2px dashed #ccc;
+      gap: 12px;
+      border: 2px dashed var(--border-color);
       border-radius: 4px;
-      padding: 10px;
-      margin-top: 10px;
+      padding: 12px;
+      margin-top: 12px;
+      min-height: 100px;
     }
+
     .preview-container img {
       max-width: 120px;
       max-height: 120px;
       border-radius: 6px;
       box-shadow: 0 0 6px rgba(0,0,0,0.1);
+      object-fit: cover;
     }
+
     .preview-container .video-label {
       font-size: 14px;
-      color: #444;
-      background: #f0f0f0;
-      padding: 8px 10px;
+      color: var(--text-color);
+      background: var(--primary-light);
+      padding: 8px 12px;
       border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
+
     .submit-btn {
-      background-color: #2e7d32;
+      background-color: var(--primary-color);
       color: white;
       border: none;
-      padding: 12px 24px;
+      padding: 14px;
       border-radius: 4px;
       font-weight: bold;
       font-size: 16px;
       cursor: pointer;
       width: 100%;
+      transition: all 0.3s ease;
     }
+
     .submit-btn:hover {
-      background-color: #1b5e20;
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+
+    .required:after {
+      content: " *";
+      color: #f44336;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
     }
   </style>
 </head>
@@ -93,14 +165,14 @@
     <h1>Food Donation Form</h1>
     <form id="donationForm">
       <div class="form-group">
-        <label for="foodName">Food Name*</label>
-        <input type="text" id="foodName" name="foodName" required />
+        <label for="foodName" class="required">Food Name</label>
+        <input type="text" id="foodName" name="foodName" required placeholder="Enter food name" />
       </div>
 
       <div class="form-group">
-        <label for="foodType">Food Type*</label>
+        <label for="foodType" class="required">Food Type</label>
         <select id="foodType" name="foodType" required>
-          <option value="">Select</option>
+          <option value="">Select food type</option>
           <option value="canned">Canned</option>
           <option value="dry">Dry</option>
           <option value="fresh">Fresh</option>
@@ -110,30 +182,33 @@
       </div>
 
       <div class="form-group">
-        <label for="quantity">Quantity*</label>
-        <input type="number" id="quantity" name="quantity" min="1" required />
+        <label for="quantity" class="required">Quantity</label>
+        <input type="number" id="quantity" name="quantity" min="1" required placeholder="Enter quantity" />
       </div>
 
       <div class="form-group">
-        <label for="location">Pickup Location*</label>
-        <textarea id="location" name="location" rows="2" required></textarea>
+        <label for="location" class="required">Pickup Location</label>
+        <textarea id="location" name="location" rows="3" required placeholder="Enter pickup location"></textarea>
       </div>
 
       <div class="form-group">
-        <label for="pickupTime">Pickup Time*</label>
+        <label for="pickupTime" class="required">Pickup Time</label>
         <input type="datetime-local" id="pickupTime" name="pickupTime" required />
       </div>
 
       <div class="form-group">
-        <label>Upload Images/Videos</label>
+        <label>Upload Images/Videos (Optional)</label>
         <div class="preview-container" id="mediaPreview"></div>
         <input type="file" id="mediaUpload" accept="image/*,video/*" multiple hidden>
-        <div class="upload-btn" onclick="document.getElementById('mediaUpload').click()">Upload Files</div>
+        <div class="upload-btn" onclick="document.getElementById('mediaUpload').click()">
+          <i class="fas fa-upload"></i>
+          Upload Files
+        </div>
       </div>
 
       <div class="form-group">
-        <label for="notes">Notes</label>
-        <textarea id="notes" name="notes" rows="3"></textarea>
+        <label for="notes">Additional Notes (Optional)</label>
+        <textarea id="notes" name="notes" rows="3" placeholder="Any special instructions or notes"></textarea>
       </div>
 
       <button type="submit" class="submit-btn">Submit Donation</button>
@@ -162,7 +237,7 @@
         } else if (fileType.startsWith("video/")) {
           const label = document.createElement("div");
           label.className = "video-label";
-          label.innerText = `Video selected: ${file.name}`;
+          label.innerHTML = `<i class="fas fa-video"></i> ${file.name}`;
           previewContainer.appendChild(label);
         }
       });
@@ -171,23 +246,57 @@
     document.getElementById("donationForm").addEventListener("submit", async function (e) {
       e.preventDefault();
       
-      const formData = new FormData();
-      const mediaFiles = document.getElementById("mediaUpload").files;
-      
-      // Add form fields
-      formData.append("foodName", document.getElementById("foodName").value);
-      formData.append("foodType", document.getElementById("foodType").value);
-      formData.append("quantity", document.getElementById("quantity").value);
-      formData.append("location", document.getElementById("location").value);
-      formData.append("pickupTime", document.getElementById("pickupTime").value);
-      formData.append("notes", document.getElementById("notes").value);
-      
-      // Add media files
-      for (let i = 0; i < mediaFiles.length; i++) {
-        formData.append("mediaFiles", mediaFiles[i]);
+      // Validate required fields
+      const requiredFields = [
+        { id: "foodName", label: "Food Name" },
+        { id: "foodType", label: "Food Type" },
+        { id: "quantity", label: "Quantity" },
+        { id: "location", label: "Location" },
+        { id: "pickupTime", label: "Pickup Time" }
+      ];
+
+      let isValid = true;
+      let missingFields = [];
+
+      requiredFields.forEach(field => {
+        const value = document.getElementById(field.id).value;
+        if (!value || value.trim() === "") {
+          isValid = false;
+          missingFields.push(field.label);
+        }
+      });
+
+      if (!isValid) {
+        alert(`Please fill in the following required fields: ${missingFields.join(", ")}`);
+        return;
       }
 
       try {
+        const formData = new FormData();
+        const mediaFiles = document.getElementById("mediaUpload").files;
+        
+        // Add form fields
+        formData.append("foodName", document.getElementById("foodName").value.trim());
+        formData.append("foodType", document.getElementById("foodType").value.trim());
+        formData.append("quantity", parseInt(document.getElementById("quantity").value.trim()));
+        formData.append("location", document.getElementById("location").value.trim());
+        formData.append("pickupTime", document.getElementById("pickupTime").value.trim());
+        formData.append("notes", document.getElementById("notes").value.trim());
+        
+        // Add media files
+        for (let i = 0; i < mediaFiles.length; i++) {
+          formData.append("mediaFiles", mediaFiles[i]);
+        }
+
+        console.log('Submitting form data:', {
+          foodName: document.getElementById("foodName").value.trim(),
+          foodType: document.getElementById("foodType").value.trim(),
+          quantity: parseInt(document.getElementById("quantity").value.trim()),
+          location: document.getElementById("location").value.trim(),
+          pickupTime: document.getElementById("pickupTime").value.trim(),
+          notes: document.getElementById("notes").value.trim()
+        });
+        
         const response = await fetch('http://localhost:5003/api/donations', {
           method: 'POST',
           body: formData
@@ -208,5 +317,8 @@
       }
     });
   </script>
+</body>
+</html>
+</script>
 </body>
 </html>
