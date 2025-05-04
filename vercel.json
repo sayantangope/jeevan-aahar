@@ -24,8 +24,8 @@
     }
   ],
   "env": {
-    "MONGODB_URI": "mongodb+srv://adrishmaji388:<Kxn5fZfKXTyooFXB>@cluster0.7pt9dyj.mongodb.net/",
-    "PORT": "5003"
+    "MONGODB_URI": "@MONGO_URI",
+    "PORT": "3000"
   }
 }
 
