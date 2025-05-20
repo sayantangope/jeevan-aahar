@@ -241,9 +241,9 @@ app.delete('/api/donations/:id', async (req, res) => {
 
 // Serve static files
 app.use('/uploads', express.static('uploads'));
-app.use(express.static(path.join(__dirname, '../jeevan-aahar-client')));
+app.use(express.static(path.join(__dirname, '../jeevan-aahar-client/public/openingpage')));
 
+// Serve index.html for all routes
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../jeevan-aahar-client/index.html'));
+  res.sendFile(path.join(__dirname, '../jeevan-aahar-client/public/openingpage', 'index.html'));
 });
-
