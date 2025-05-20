@@ -239,11 +239,59 @@ app.delete('/api/donations/:id', async (req, res) => {
   }
 });
 
+// Add statistics endpoint
+app.get('/api/statistics', async (req, res) => {
+  try {
+    // Get current date and date 30 days ago
+    const now = new Date();
+    const thirtyDaysAgo = new Date(now.getTime() - (30 * 24 * 60 * 60 * 1000));
+
+    // Get all donations
+    const donations = await Donation.find();
+
+    // Calculate statistics
+    const stats = {
+      // For receiver dashboard
+      mealsReceived: donations.reduce((total, d) => {
+        if (d.status === 'completed') {
+          return total + (d.quantity || 0);
+        }
+        return total;
+      }, 0),
+      upcomingDeliveries: donations.filter(d => 
+        d.status === 'accepted' && 
+        new Date(d.pickupTime) > now
+      ).length,
+      avgQualityScore: 95, // Placeholder - implement actual quality rating system later
+
+      // For donor dashboard
+      totalDonations: donations.length,
+      mealsProvided: donations.reduce((total, d) => {
+        if (d.status === 'completed') {
+          return total + (d.quantity || 0);
+        }
+        return total;
+      }, 0),
+      activeDonations: donations.filter(d => 
+        ['pending', 'accepted'].includes(d.status)
+      ).length
+    };
+
+    res.json(stats);
+  } catch (error) {
+    console.error('Error fetching statistics:', error);
+    res.status(500).json({ 
+      error: 'Failed to fetch statistics',
+      details: error.message 
+    });
+  }
+});
+
 // Serve static files
 app.use('/uploads', express.static('uploads'));
 app.use(express.static(path.join(__dirname, '../jeevan-aahar-client/public/openingpage')));
 
-// Serve index.html for all routes
+// Move catch-all route to the end
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../jeevan-aahar-client/public/openingpage', 'index.html'));
 });
