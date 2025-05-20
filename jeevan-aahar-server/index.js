@@ -241,11 +241,9 @@ app.delete('/api/donations/:id', async (req, res) => {
 
 // Serve static files
 app.use('/uploads', express.static('uploads'));
-const clientPath = path.join(__dirname, '../jeevan-aahar-client');
+app.use(express.static(path.join(__dirname, '../jeevan-aahar-client')));
 
-app.use(express.static(clientPath));
-
-// Serve index.html for all unmatched routes (for SPA routing support)
 app.get('*', (req, res) => {
-  res.sendFile(path.join(clientPath, 'index.html'));
+  res.sendFile(path.join(__dirname, '../jeevan-aahar-client/index.html'));
 });
+
